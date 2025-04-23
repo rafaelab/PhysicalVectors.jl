@@ -8,7 +8,7 @@ export
 @doc """
 	VectorSpatial{D, T, V <: StaticVector{D, T}}
 
-A structure representing a Euclidean vector in a physical vector space.\\ 
+A structure representing a spatial vector in a physical vector space.\\ 
 It is parameterised by:\\
 - `D`: dimensionality of the vector \\
 - `T`: element type of the vector \\
@@ -47,10 +47,10 @@ end
 # ----------------------------------------------------------------------------------------------- #
 # 
 @doc """
-	dot(v1::VectorEuclid{D, T1}, v2::VectorEuclid{D, T2}) -> Number
-	dot(v1::VectorEuclid{D, T1}, v2::VectorEuclid{D, T2}, m::AbstractMetric) -> Number
+	dot(v1::VectorSpatial{D, T1}, v2::VectorSpatial{D, T2}) -> Number
+	dot(v1::VectorSpatial{D, T1}, v2::VectorSpatial{D, T2}, m::AbstractMetric) -> Number
 
-Computes the dot product of two Euclidean vectors `v1` and `v2` using their internal vector representations, for a given metric `m`. \\
+Computes the dot product of two spatial vectors `v1` and `v2` using their internal vector representations, for a given metric `m`. \\
 The metric here makes no difference whatsoever, as the dot product is invariant under any metric, by construction.\\
 The method involving the metric is included for consistency with the Lorentzian case.\\
 
