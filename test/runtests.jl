@@ -5,5 +5,3 @@ using StaticArrays
 
 include("testMetric.jl")
 include("testVector.jl")
-
-;
