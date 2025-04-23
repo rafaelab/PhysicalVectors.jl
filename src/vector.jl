@@ -45,10 +45,10 @@ This macro is not exported and is intended for internal use within the package. 
 The generated constructors allow for the creation of `VectorXXX` instances from different input types, including: \\
 1. Static Vectors (`SVector`):\\
 . Accepts an `SVector{D, T}` where `D` is the dimension and `T` is a subtype of `Number`. \\
-. Returns an instance of `vector` parameterized by `D`, `T`, and the type of the input vector. \\
+. Returns an instance of `vector` parameterised by `D`, `T`, and the type of the input vector. \\
 2. Abstract Vectors: \\
 . Accepts an `AbstractVector{T}` where `T` is a subtype of `Number`. \\
-. Converts the input vector to a mutable `MVector` and returns an instance of `vector` parameterized by the length of the input vector, `T`, and the type of the converted vector. \\
+. Converts the input vector to a mutable `MVector` and returns an instance of `vector` parameterised by the length of the input vector, `T`, and the type of the converted vector. \\
 3. Varargs: \\
 . Accepts a variable number of arguments of type `T` (where `T` is a subtype of `Number`). \\
 . Constructs an `MVector` from the arguments and returns an instance of `vector`. \\
