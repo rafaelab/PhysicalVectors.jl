@@ -43,6 +43,7 @@ function Base.getproperty(v::VectorSpatial{D, T}, u::Symbol) where {D, T}
 	return getfield(v, u)
 end
 
+
 # ----------------------------------------------------------------------------------------------- #
 # 
 @doc """

@@ -50,7 +50,6 @@ function Base.getproperty(v::VectorLorentz{D, T}, u::Symbol) where {D, T}
 end
 
 
-
 # ----------------------------------------------------------------------------------------------- #
 # 
 @doc """

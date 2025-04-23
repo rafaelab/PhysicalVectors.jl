@@ -26,9 +26,8 @@ struct VectorEuclid{D, T, V <: StaticVector{D, T}} <: AbstractPhysicalVector{D, 
 	vector::V
 end
 
-
-
 @physicalVectorConstructors VectorEuclid
+
 
 # ----------------------------------------------------------------------------------------------- #
 # 
@@ -43,7 +42,6 @@ function Base.getproperty(v::VectorEuclid{D, T}, u::Symbol) where {D, T}
 	
 	return getfield(v, u)
 end
-
 
 
 # ----------------------------------------------------------------------------------------------- #
