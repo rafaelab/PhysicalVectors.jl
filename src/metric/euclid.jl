@@ -28,8 +28,6 @@ struct MetricEuclid{D, T} <: AbstractMetric{D, T}
 end
 
 
-MetricEuclid(m::SMatrix{D, D, T}) where {D, T} = MetricEuclid{D, T}(m)
-
 MetricEuclid(m::AbstractMatrix{T}) where {T} = begin
 	d = size(m, 1)
 	size(m) == (d, d) || throw(DimensionMismatch("Matrix must be square"))
