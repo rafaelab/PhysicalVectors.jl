@@ -1,8 +1,3 @@
-using Test
-using PhysicalVectors
-using StaticArrays
-
-
 @testset "MetricEuclid Tests" begin
 
 	@testset "constructor with SMatrix" begin

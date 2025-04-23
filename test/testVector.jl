@@ -1,11 +1,3 @@
-using Test
-using PhysicalVectors
-using StaticArrays
-
-
-
-
-
 @testset "VectorEuclid Tests" begin
 
 	@testset "constructor with StaticVector" begin
