@@ -24,10 +24,17 @@ This type is a subtype of `AbstractMetric{N, T}` and is used to represent and wo
 - `MetricEuclid(d::Integer)` \\
 """
 struct MetricEuclid{D, T} <: AbstractMetric{D, T}
-	metric::SMatrix{D, D, T}
+	tensor::SMatrix{D, D, T}
 end
 
-@metricMatrixConstructors MetricEuclid
+
+MetricEuclid(m::SMatrix{D, D, T}) where {D, T} = MetricEuclid{D, T}(m)
+
+MetricEuclid(m::AbstractMatrix{T}) where {T} = begin
+	d = size(m, 1)
+	size(m) == (d, d) || throw(DimensionMismatch("Matrix must be square"))
+	return MetricEuclid{d, T}(SMatrix{d, d, T}(m))
+end
 
 MetricEuclid(d::Integer, ::Type{T}) where {T <: AbstractFloat} = begin
 	return MetricEuclid(Diagonal(ones(T, d)))

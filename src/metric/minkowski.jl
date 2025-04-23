@@ -29,10 +29,20 @@ The last element of the metric is the time-dependent one.
 - `MetricMinkowski(d::Integer)`
 """
 struct MetricMinkowski{D, T, S} <: AbstractMetric{D, T}
-	metric::SMatrix{D, D, T}
+	tensor::SMatrix{D, D, T}
 end
 
-@metricMatrixConstructors MetricMinkowski
+MetricMinkowski(m::SMatrix{D, D, T}) where {D, T} = begin
+	S = first(m) > 0 ? MostlyPlus : MostlyMinus
+	return MetricMinkowski{D, T, S}(m)
+end
+
+MetricMinkowski(m::AbstractMatrix{T}) where {T} = begin
+	d = size(m, 1)
+	size(m) == (d, d) || throw(DimensionMismatch("Matrix must be square"))
+	S = first(m) > 0 ? MostlyPlus : MostlyMinus
+	return MetricMinkowski{d, T, S}(SMatrix{d, d, T}(m))
+end
 
 MetricMinkowski(d::Integer, ::Type{T}, ::Type{S}) where {T <: AbstractFloat, S <: MetricSignatureConvention} = begin
 	return MetricMinkowski(Diagonal(_getSignature(d, S, T)))
