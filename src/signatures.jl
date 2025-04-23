@@ -9,7 +9,7 @@ export
 # ----------------------------------------------------------------------------------------------- #
 #
 @doc """
-MetricSignatureConvention
+	MetricSignatureConvention
 
 Abstract type representing a convention for metric signature in spacetime geometries. \\
 This is implemented for completeness. The mostly-plus signature is obviously the better one, despite the wide adoption of the mostly-minus convetion in high-energy physics. \\
