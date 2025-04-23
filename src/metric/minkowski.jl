@@ -1,7 +1,9 @@
 # ----------------------------------------------------------------------------------------------- #
 #
 export 
-	MetricMinkowski
+	MetricMinkowski,
+	isMostlyMinus,
+	isMostlyPlus
 
 # ----------------------------------------------------------------------------------------------- #
 #
@@ -50,6 +52,27 @@ end
 
 MetricMinkowski(d::Integer) = MetricMinkowski(d, Float64, MostlyPlus)
 
+
+# ----------------------------------------------------------------------------------------------- #
+#
+"""
+	isMostlyPlus(m::MetricMinkowski) -> Bool
+	isMostlyMinus(m::MetricMinkowski) -> Bool
+
+Determines the signature convention of the Minkowski metric. 
+
+# Input
+- `m::MetricMinkowski{D, T, MostlyPlus}`:  Minkowski metric object with "mostly plus" convention \\
+- `m::MetricMinkowski{D, T, MostlyMinus}`:  Minkowski metric object with "mostly minus" convention \\
+
+# Output
+- `true` if the metric is "mostly plus" \\
+- `false` if the metric is "mostly minus" \\
+"""
+isMostlyPlus(::MetricMinkowski{D, T, MostlyPlus}) where {D, T} = true
+isMostlyPlus(::MetricMinkowski{D, T, MostlyMinus}) where {D, T} = false
+isMostlyMinus(::MetricMinkowski{D, T, MostlyPlus}) where {D, T} = false
+isMostlyMinus(::MetricMinkowski{D, T, MostlyMinus}) where {D, T} = true
 
 
 # ----------------------------------------------------------------------------------------------- #
