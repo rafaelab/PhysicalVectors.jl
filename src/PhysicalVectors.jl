@@ -1,10 +1,12 @@
 module PhysicalVectors
 
 using Reexport
+using LinearAlgebra
 @reexport using StaticArrays
 
 @reexport import LinearAlgebra:
 	Diagonal,
+	I,
 	norm,
 	dot,
 	cross,
@@ -25,21 +27,4 @@ include("vector.jl")
 
 
 
-
 end
-
-
-# using .PhysicalVectors
-
-
-# v = VectorLorentz(1., 2., 3.3, 2.)
-
-# u = VectorEuclid(@MVector([1., 2., 3.]))
-
-# PhysicalVectors.getSpatialPart(v)
-
-# # size(v)
-
-# # v[2] = 10.
-
-# # v
