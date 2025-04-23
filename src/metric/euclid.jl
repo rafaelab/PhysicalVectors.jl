@@ -1,15 +1,15 @@
 # ----------------------------------------------------------------------------------------------- #
 #
 export 
-	MetricEuclidean
+	MetricEuclid
 
 
 # ----------------------------------------------------------------------------------------------- #
 #
 @doc """
-	MetricEuclidean
+	MetricEuclid
 
-A structure representing a Euclidean metric in `D`-dimensional space. This metric is parameterised by:
+A structure representing an Euclidean metric in `D`-dimensional space. This metric is parameterised by:
 - `D`: the dimensionality of the space \\
 - `T`: the numeric type of the elements (e.g., `Float64`) \\
 
@@ -17,15 +17,23 @@ This type is a subtype of `AbstractMetric{N, T}` and is used to represent and wo
 
 # Fields
 - `metric::V`: a static matrix that defines the Euclidean metric \\
+
+# Available constructors
+- `MetricEuclid(m::AbstractMatrix{D, D, T})` \\
+- `MetricEuclid(d::Integer, ::Type{T})` \\
+- `MetricEuclid(d::Integer)` \\
 """
-struct MetricEuclidean{D, T} <: AbstractMetric{D, T}
+struct MetricEuclid{D, T} <: AbstractMetric{D, T}
 	metric::SMatrix{D, D, T}
 end
 
-MetricEuclidean(d::Integer, ::Type{T}) where {T <: AbstractFloat} = MetricEuclidean{d, T}(Diagonal(ones(T, d)))
+@metricMatrixConstructors MetricEuclid
 
-MetricEuclidean(d::Integer) = MetricEuclidean(d, Float64)
+MetricEuclid(d::Integer, ::Type{T}) where {T <: AbstractFloat} = begin
+	return MetricEuclid(Diagonal(ones(T, d)))
+end
 
+MetricEuclid(d::Integer) = MetricEuclid(d, Float64)
 
 
 # ----------------------------------------------------------------------------------------------- #

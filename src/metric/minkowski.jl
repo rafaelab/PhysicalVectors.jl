@@ -1,18 +1,7 @@
 # ----------------------------------------------------------------------------------------------- #
 #
 export 
-	MetricMinkowski,
-	MostlyMinus,
-	MostlyPlus
-
-
-
-# ----------------------------------------------------------------------------------------------- #
-#
-abstract type MetricSignatureConvention end
-struct MostlyMinus <: MetricSignatureConvention end
-struct MostlyPlus <: MetricSignatureConvention end
-
+	MetricMinkowski
 
 # ----------------------------------------------------------------------------------------------- #
 #
@@ -29,14 +18,22 @@ The last element of the metric is the time-dependent one.
 
 # Fields
 - `metric::V`: a static matrix that defines the Minkowski metric \\
+
+# Available constructors
+- `MetricMinkowski(d::Integer, ::Type{T}, ::Type{S})` \\
+- `MetricMinkowski(d::Integer, ::Type{S}, ::Type{T})` \\
+- `MetricMinkowski(d::Integer, ::Type{T})` \\
+- `MetricMinkowski(d::Integer, ::Type{S})` \\
+- `MetricMinkowski(d::Integer)`
 """
 struct MetricMinkowski{D, T, S} <: AbstractMetric{D, T}
 	metric::SMatrix{D, D, T}
 end
 
+@metricMatrixConstructors MetricMinkowski
 
 MetricMinkowski(d::Integer, ::Type{T}, ::Type{S}) where {T <: AbstractFloat, S <: MetricSignatureConvention} = begin
-	return MetricMinkowski{d, T, S}(Diagonal(_getSignature(d, S, T)))
+	return MetricMinkowski(Diagonal(_getSignature(d, S, T)))
 end
 
 MetricMinkowski(d::Integer, ::Type{S}, ::Type{T}) where {T <: AbstractFloat, S <: MetricSignatureConvention} = begin
@@ -52,19 +49,6 @@ MetricMinkowski(d::Integer, ::Type{S}) where {S <: MetricSignatureConvention} = 
 end
 
 MetricMinkowski(d::Integer) = MetricMinkowski(d, Float64, MostlyPlus)
-
-
-
-# ----------------------------------------------------------------------------------------------- #
-#
-@inline _getSignature(d::Integer, ::Type{MostlyPlus}, ::Type{T}) where {T <: AbstractFloat} = begin
-	v = @SVector(ones(T, d - 1))
-	return vcat(v, [-1])
-end
-
-@inline _getSignature(d::Integer, ::Type{MostlyMinus}, ::Type{T}) where {T <: AbstractFloat} = begin
-	return - _getSignature(d, MostlyPlus, T)
-end
 
 
 
