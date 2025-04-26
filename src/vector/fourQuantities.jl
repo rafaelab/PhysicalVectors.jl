@@ -42,7 +42,7 @@ and accessing temporal and spatial parts.
 macro generateFourQuantity(quantity)
 	quote
 		@doc """
-			struct $(esc(quantity)){D, T, V <: StaticVector{D, T}} <: AbstractPhysicalVector{D, T}
+			struct $($(quantity)){D, T, V <: StaticVector{D, T}} <: AbstractPhysicalVector{D, T}
 		
 		
 		Constructors for the `$($(quantity))` type.
@@ -159,35 +159,35 @@ Extracts the spatial part of a `FourMomentum` object.
 # ----------------------------------------------------------------------------------------------- #
 #
 @doc """
-	getChargeDensity(v::FourCurrent) -> Float64
+	getChargeDensity(v::FourCurrentDensity) -> Float64
 
-Computes the charge density of a `FourCurrent` object `v`.
+Computes the charge density of a `FourCurrentDensity` object `v`.
 The charge density is calculated as the temporal part of the four-current divided by the speed of light `c`.
 
 # Input
-- `v::FourCurrent`: four-current object for which the charge density is to be computed \\
+- `v::FourCurrentDensity`: four-current object for which the charge density is to be computed \\
 
 # Output
 - `Float64`: the charge density corresponding to the given four-current in units of C/m³ \\
 """
-@inline getChargeDensity(v::FourCurrent) = getTemporalPart(v) / c
+@inline getChargeDensity(v::FourCurrentDensity) = getTemporalPart(v) / c
 
 
 
 # ----------------------------------------------------------------------------------------------- #
 #
 @doc """
-	getCurrent(v::FourCurrent) -> VectorSpatial
+	getCurrent(v::FourCurrentDensity) -> VectorSpatial
 
-Extracts the spatial part of a `FourCurrent` object.
+Extracts the spatial part of a `FourCurrentDensity` object.
 
 # Input
-- `v::FourCurrent`: the four-current object from which the spatial part (current) is to be extracted \\
+- `v::FourCurrentDensity`: the four-current object from which the spatial part (current) is to be extracted \\
 
 # Output
-- The `VectorSpatial` representing the spatial current component of the input `FourCurrent` \\
+- The `VectorSpatial` representing the spatial current component of the input `FourCurrentDensity` \\
 """
-@inline getCurrentDensity(v::FourCurrent) = getSpatialPart(v)
+@inline getCurrentDensity(v::FourCurrentDensity) = getSpatialPart(v)
 
 
 # ----------------------------------------------------------------------------------------------- #
