@@ -121,7 +121,7 @@ Retrieve the spatial part of a `FourPosition` object.
 # Output
 - `VectorSpatial`: the spatial part of the four-position \\
 """
-getPosition(p::FourPosition) = getSpatialPart(p)
+@inline getPosition(p::FourPosition) = getSpatialPart(p)
 
 # ----------------------------------------------------------------------------------------------- #
 #
@@ -137,7 +137,7 @@ The energy is calculated as the temporal part of the four-momentum multiplied by
 # Output
 - `Float64`: the energy corresponding to the given four-momentum in units of Joules \\
 """
-getEnergy(v::FourMomentum) = getTemporalPart(v) * c
+@inline getEnergy(v::FourMomentum) = getTemporalPart(v) * c
 
 
 # ----------------------------------------------------------------------------------------------- #
@@ -153,7 +153,7 @@ Extracts the spatial part of a `FourMomentum` object.
 # Output
 - The `VectorSpatial` representing the spatial momentum component of the input `FourMomentum` \\
 """
-getMomentum(v::FourMomentum) = getSpatialPart(v)
+@inline getMomentum(v::FourMomentum) = getSpatialPart(v)
 
 
 # ----------------------------------------------------------------------------------------------- #
@@ -170,7 +170,7 @@ The charge density is calculated as the temporal part of the four-current divide
 # Output
 - `Float64`: the charge density corresponding to the given four-current in units of C/m³ \\
 """
-getChargeDensity(v::FourCurrent) = getTemporalPart(v) / c
+@inline getChargeDensity(v::FourCurrent) = getTemporalPart(v) / c
 
 
 
@@ -187,7 +187,7 @@ Extracts the spatial part of a `FourCurrent` object.
 # Output
 - The `VectorSpatial` representing the spatial current component of the input `FourCurrent` \\
 """
-getCurrentDensity(v::FourCurrent) = getSpatialPart(v)
+@inline getCurrentDensity(v::FourCurrent) = getSpatialPart(v)
 
 
 # ----------------------------------------------------------------------------------------------- #
