@@ -20,7 +20,7 @@ import LinearAlgebra:
 	eigen
 
 
-
+include("unitsConstants.jl")
 include("signatures.jl")
 include("metric.jl")
 include("vector.jl")
@@ -35,7 +35,7 @@ using .PhysicalVectors
 import .PhysicalVectors: FourPosition, FourMomentum
 
 # Create a FourPosition
-pos = FourPosition(SVector(1.0, 2.0, 3.0, 4.0))
+pos = FourPosition([1.0, 2.0, 3.0, 4.0])
 println(pos.vector)  # Output: VectorLorentz(SVector(1.0, 2.0, 3.0, 4.0))
 
 # Create a FourMomentum
