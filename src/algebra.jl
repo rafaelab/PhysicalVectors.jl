@@ -1,6 +1,17 @@
 # ----------------------------------------------------------------------------------------------- #
 #
 @doc """
+	dot
+
+Defines the `dot` function, which is typically used to compute the dot product of two vectors. 
+This is a placeholder definition and should be extended with specific methods for the desired types.
+"""
+function dot end
+
+
+# ----------------------------------------------------------------------------------------------- #
+#
+@doc """
 	norm(v::AbstractPhysicalVector{D, T}) -> T
 	norm(v::AbstractPhysicalVector{D, T}, m::AbstractMetric{D, U}) -> T
 
