@@ -177,7 +177,7 @@ macro generateFourVector(quantity)
 		This structure allows for new methods and explicit dispatching.
 		# Parameters
 		- `D`: the dimensionality of the vector \\
-		- `T`: the numeric type of the vector elements (e.g., `Float64`) \\
+		- `T`: the numeric type of the vector elements (e.g., `AbstractFloat`) \\
 		- `V`: a subtype of `StaticVector` representing the underlying vector type \\
 		"""
 		struct $(esc(quantity)){D, T, V <: StaticVector{D, T}} <: AbstractPhysicalVector{D, T}
@@ -218,11 +218,10 @@ end
 @generateFourVector FourMomentum
 @generateFourVector FourCurrentDensity
 
-
 # ----------------------------------------------------------------------------------------------- #
 #
 @doc """
-	getTime(p::FourPosition) -> Float64
+	getTime(p::FourPosition) -> AbstractFloat
 
 Computes the time component of a `FourPosition` object by dividing its temporal part by the speed of light `c`.
 
@@ -230,9 +229,9 @@ Computes the time component of a `FourPosition` object by dividing its temporal 
 - `x::FourPosition`: four-position object from which the time component is extracted \\
 
 # Output
-- `Float64`: the time component of the four-position \\
+- `AbstractFloat`: the time component of the four-position \\
 """
-getTime(x::FourPosition) = getTemporalPart(x) / c
+@inline getTime(x::FourPosition) = getTemporalPart(x) / c
 
 
 # ----------------------------------------------------------------------------------------------- #
@@ -253,7 +252,7 @@ Retrieve the spatial part of a `FourPosition` object.
 # ----------------------------------------------------------------------------------------------- #
 #
 @doc """
-	getEnergy(v::FourMomentum) -> Float64
+	getEnergy(v::FourMomentum) -> AbstractFloat
 
 Compute the energy of a `FourMomentum` object `v`. 
 The energy is calculated as the temporal part of the four-momentum multiplied by the speed of light `c`.
@@ -262,7 +261,7 @@ The energy is calculated as the temporal part of the four-momentum multiplied by
 - `v::FourMomentum`: four-momentum object for which the energy is to be computed \\
 
 # Output
-- `Float64`: the energy corresponding to the given four-momentum in units of Joules \\
+- `AbstractFloat`: the energy corresponding to the given four-momentum in units of Joules \\
 """
 @inline getEnergy(v::FourMomentum) = getTemporalPart(v) * c
 
@@ -286,7 +285,7 @@ Extracts the spatial part of a `FourMomentum` object.
 # ----------------------------------------------------------------------------------------------- #
 #
 @doc """
-	getChargeDensity(v::FourCurrentDensity) -> Float64
+	getChargeDensity(v::FourCurrentDensity) -> AbstractFloat
 
 Computes the charge density of a `FourCurrentDensity` object `v`.
 The charge density is calculated as the temporal part of the four-current divided by the speed of light `c`.
@@ -295,10 +294,9 @@ The charge density is calculated as the temporal part of the four-current divide
 - `v::FourCurrentDensity`: four-current object for which the charge density is to be computed \\
 
 # Output
-- `Float64`: the charge density corresponding to the given four-current in units of C/m³ \\
+- `AbstractFloat`: the charge density corresponding to the given four-current in units of C/m³ \\
 """
 @inline getChargeDensity(v::FourCurrentDensity) = getTemporalPart(v) / c
-
 
 
 # ----------------------------------------------------------------------------------------------- #
