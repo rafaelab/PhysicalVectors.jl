@@ -1,6 +1,8 @@
 using Test
-using PhysicalVectors
+using LinearAlgebra
 using StaticArrays
+using PhysicalVectors
+
 
 
 include("testMetric.jl")
