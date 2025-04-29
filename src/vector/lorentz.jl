@@ -143,7 +143,7 @@ end
 # ----------------------------------------------------------------------------------------------- #
 #
 @doc """
-	@generateFourQuantity(quantity)
+	@generateFourVector(quantity)
 
 Macro to generate a `FourQuantity` type and its associated methods.
 
@@ -166,7 +166,7 @@ and accessing temporal and spatial parts.
 	-- `getSpatialPart`:retrieves the spatial part of the vector \\
 	-- `dot`: computes the dot product of two `quantity` objects, optionally using a metric \\
 """
-macro generateFourQuantity(quantity)
+macro generateFourVector(quantity)
 	quote
 		@doc """
 			struct $($(quantity)){D, T, V <: StaticVector{D, T}} <: AbstractPhysicalVector{D, T}
@@ -213,10 +213,10 @@ end
 
 # ----------------------------------------------------------------------------------------------- #
 #
-@generateFourQuantity FourPosition
-@generateFourQuantity FourVelocity
-@generateFourQuantity FourMomentum
-@generateFourQuantity FourCurrentDensity
+@generateFourVector FourPosition
+@generateFourVector FourVelocity
+@generateFourVector FourMomentum
+@generateFourVector FourCurrentDensity
 
 
 # ----------------------------------------------------------------------------------------------- #
