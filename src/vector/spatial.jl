@@ -72,4 +72,31 @@ function dot(v1::VectorSpatial, v2::VectorSpatial, m::AbstractMetric)
 end
 
 
+
+# ----------------------------------------------------------------------------------------------- #
+# 
+@doc """
+	cross(v1::VectorSpatial, v2::VectorSpatial) -> VectorSpatial
+
+Compute the cross product of two 3D spatial vectors `v1` and `v2`.\\
+This function is only defined for 3-dimensional vectors.\\
+It throw a `DimensionMismatch` error if the vectors are not 3D.\\
+
+# Input
+- `v1::VectorSpatial`:  first 3D spatial vector \\
+- `v2::VectorSpatial`:  second 3D spatial vector \\
+
+# Output
+- A new `VectorSpatial` object representing the cross product of `v1` and `v2`.
+
+# Notes
+The cross product is only defined for 3-dimensional vectors. Ensure that both input vectors have a length of 3 before calling this function.
+"""
+function cross(v1::VectorSpatial, v2::VectorSpatial)
+	if length(v1) ≠ 3 || length(v2) ≠ 3
+		throw(DimensionMismatch("Cross product is only defined for 3D vectors."))
+	end
+	return VectorSpatial(cross(v1.vector, v2.vector))
+end
+
 # ----------------------------------------------------------------------------------------------- #

@@ -12,6 +12,17 @@ function dot end
 # ----------------------------------------------------------------------------------------------- #
 #
 @doc """
+	cross
+
+Defines the `cross` function commonly used for vector products. 
+This is a placeholder definition and should be extended with specific methods for the desired types.
+"""
+function cross end
+
+
+# ----------------------------------------------------------------------------------------------- #
+#
+@doc """
 	norm(v::AbstractPhysicalVector{D, T}) -> T
 	norm(v::AbstractPhysicalVector{D, T}, m::AbstractMetric{D, U}) -> T
 

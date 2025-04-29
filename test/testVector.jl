@@ -274,4 +274,20 @@ end
 		@test result.vector == SVector(0.5, 1.0, 1.5)
 	end
 
+	@testset "vector dot product" begin
+		result = dot(v1, v2)
+		@test result == 1.0 * 4.0 + 2.0 * 5.0 + 3.0 * 6.0
+	end
+
+	@testset "vector norm" begin
+		result = norm(v1)
+		@test result == sqrt(1 + 4. + 9.)
+	end
+
+	@testset "cross product" begin
+		result = cross(v1, v2)
+		@test result isa VectorSpatial
+		@test result == SVector(-3., 6., -3.)
+	end
+
 end
