@@ -1,7 +1,7 @@
 name = "PhysicalVectors"
 uuid = "45ff8ec7-7647-48a6-824b-610d14c24084"
 authors = ["Rafael <rafaelab@users.noreply.github.com>"]
-version = "0.2.2"
+version = "0.2.3"
 
 [deps]
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
