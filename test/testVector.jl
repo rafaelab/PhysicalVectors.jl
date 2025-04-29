@@ -170,6 +170,7 @@ end
 	@testset "spatial part extraction" begin
 		v = VectorLorentz(SVector(1., 2., 3., 4.))
 		spatial = getSpatialPart(v)
+		@test spatial isa VectorSpatial
 		@test spatial.vector == SVector(1., 2., 3.)
 		@test length(spatial) == 3
 		@test eltype(spatial) == Float64
@@ -236,20 +237,26 @@ end
 
 
 @testset "Vector Operations Tests" begin
-	v1 = VectorSpatial(SVector(1.0, 2.0, 3.0))
-	v2 = VectorSpatial(SVector(4.0, 5.0, 6.0))
+	v1 = VectorSpatial(SVector(1., 2., 3.))
+	v2 = VectorSpatial(SVector(4., 5., 6.))
+	v3 = VectorLorentz(SVector(1., 2., 3., 4.))
+	v4 = VectorLorentz(SVector(4., 3., 2., 1.))
 	scalar = 2.
 
 	@testset "vector addition" begin
 		result = v1 + v2
 		@test result isa VectorSpatial
 		@test result.vector == SVector(5.0, 7.0, 9.0)
+
+		result = v3 + v4
+		@test result isa VectorLorentz
+		@test result.vector == SVector(5., 5., 5., 5.)
 	end
 
 	@testset "vector subtraction" begin
 		result = v1 - v2
 		@test result isa VectorSpatial
-		@test result.vector == SVector(-3.0, -3.0, -3.0)
+		@test result.vector == SVector(-3., -3., -3.)
 	end
 
 	@testset "vector scalar multiplication" begin
