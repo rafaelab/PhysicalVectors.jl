@@ -24,6 +24,7 @@ include("unitsConstants.jl")
 include("signatures.jl")
 include("metric.jl")
 include("vector.jl")
+include("algebra.jl")
 
 
 
