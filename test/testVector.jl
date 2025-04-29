@@ -67,7 +67,6 @@
 end
 
 
-
 @testset "VectorSpatial Tests" begin
 
 	@testset "constructor with StaticVector" begin
@@ -135,7 +134,6 @@ end
 	end
 
 end
-
 
 
 @testset "VectorLorentz Tests" begin
@@ -232,6 +230,41 @@ end
 		v2 = VectorLorentz(SVector(3., 4.))
 		metric = MetricMinkowski(2, Float64, MostlyPlus)
 		@test dot(v1, v2, metric) == 1. * 3. -  2. * 4.
+	end
+
+end
+
+
+@testset "Vector Operations Tests" begin
+	v1 = VectorSpatial(SVector(1.0, 2.0, 3.0))
+	v2 = VectorSpatial(SVector(4.0, 5.0, 6.0))
+	scalar = 2.
+
+	@testset "vector addition" begin
+		result = v1 + v2
+		@test result isa VectorSpatial
+		@test result.vector == SVector(5.0, 7.0, 9.0)
+	end
+
+	@testset "vector subtraction" begin
+		result = v1 - v2
+		@test result isa VectorSpatial
+		@test result.vector == SVector(-3.0, -3.0, -3.0)
+	end
+
+	@testset "vector scalar multiplication" begin
+		result1 = v1 * scalar
+		result2 = scalar * v1
+		@test result1 isa VectorSpatial
+		@test result2 isa VectorSpatial
+		@test result1.vector == SVector(2., 4., 6.)
+		@test result2.vector == SVector(2., 4., 6.)
+	end
+
+	@testset "vector scalar division" begin
+		result = v1 / scalar
+		@test result isa VectorSpatial
+		@test result.vector == SVector(0.5, 1.0, 1.5)
 	end
 
 end
