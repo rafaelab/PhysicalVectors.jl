@@ -1,4 +1,3 @@
-
 # ----------------------------------------------------------------------------------------------- #
 #
 @doc """
@@ -78,11 +77,11 @@ macro physicalVectorConstructors(vector)
 			return $(esc(vector))(v1.vector .- v2.vector)
 		end
 
-		Base.:(*)(v::$(esc(vector)), a::$(esc(vector))) = begin
+		Base.:(*)(v::$(esc(vector)), a::Number) = begin
 			return $(esc(vector))(v.vector .* a)
 		end
 
-		Base.:(*)(a::$(esc(vector)), va::$(esc(vector))) = begin
+		Base.:(*)(a::Number, v::$(esc(vector))) = begin
 			return $(esc(vector))(a .* v.vector)
 		end
 
