@@ -30,7 +30,7 @@ Base.getindex(v::AbstractPhysicalVector, i::Integer)  = v.vector[i]
 
 Base.IndexStyle(::Type{<: AbstractPhysicalVector}) = IndexCartesian()
 
-Base.setindex!(v::AbstractPhysicalVector{D, T}, value, i::Integer) where {D, T} = begin
+Base.setindex!(v::AbstractPhysicalVector, value, i::Integer) = begin
 	v.vector[i] = value
 end
 
@@ -68,6 +68,26 @@ macro physicalVectorConstructors(vector)
 
 		$(esc(vector))(vs::Vararg{T}) where {T <: Number} = begin
 			return $(vector)([vs...])
+		end
+
+		Base.:(+)(v1::$(esc(vector)), v2::$(esc(vector))) = begin
+			return $(esc(vector))(v1.vector .+ v2.vector)
+		end
+
+		Base.:(-)(v1::$(esc(vector)), v2::$(esc(vector))) = begin
+			return $(esc(vector))(v1.vector .- v2.vector)
+		end
+
+		Base.:(*)(v::$(esc(vector)), a::$(esc(vector))) = begin
+			return $(esc(vector))(v.vector .* a)
+		end
+
+		Base.:(*)(a::$(esc(vector)), va::$(esc(vector))) = begin
+			return $(esc(vector))(a .* v.vector)
+		end
+
+		Base.:(/)(v::$(esc(vector)), a::Number) = begin
+			return $(esc(vector))(v.vector ./ a)
 		end
 
 	end
