@@ -96,7 +96,6 @@ end
 
 # ----------------------------------------------------------------------------------------------- #
 #
-include("vector/euclid.jl")
 include("vector/spatial.jl")
 include("vector/lorentz.jl")
 
