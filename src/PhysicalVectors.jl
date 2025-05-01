@@ -10,16 +10,9 @@ import LinearAlgebra:
 	I,
 	norm,
 	dot,
-	cross,
-	transpose,
-	adjoint,
-	inv,
-	det,
-	eigvals,
-	eigvecs,
-	eigen
+	cross
 
-
+	
 include("unitsConstants.jl")
 include("signatures.jl")
 include("metric.jl")
