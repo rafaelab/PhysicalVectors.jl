@@ -93,6 +93,7 @@ macro physicalVectorConstructors(vector)
 end
 
 
+
 # ----------------------------------------------------------------------------------------------- #
 #
 include("vector/euclid.jl")
