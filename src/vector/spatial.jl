@@ -1,7 +1,9 @@
 # ----------------------------------------------------------------------------------------------- #
 # 
 export 
-	VectorSpatial
+	VectorSpatial,
+	norm2,
+	norm²
 
 # ----------------------------------------------------------------------------------------------- #
 # 
@@ -57,7 +59,7 @@ The method involving the metric is included for consistency with the Lorentzian 
 # Input
 - `v1::VectorLorentz`: first Lorentz vector \\
 - `v2::VectorLorentz`: second Lorentz vector \\
-- `m::AbstractMetric`: an `AbstractMetric`-type object; defaults to Minkowski \\
+. (optional) `m::AbstractMetric`: an `AbstractMetric`-type object; defaults to Minkowski \\
 
 # Output
 - `Number`: the dot product of the two Lorentz vectors. \\
@@ -71,6 +73,25 @@ function dot(v1::VectorSpatial, v2::VectorSpatial, m::AbstractMetric)
 	return  dot(v1, v2) ##### FIX!!!!!!!!!!!
 end
 
+
+# ----------------------------------------------------------------------------------------------- #
+#
+@doc """
+	norm2(v::VectorSpatial) -> Number
+
+Computes the squared norm (or squared magnitude) of a `VectorSpatial` object `v`.
+
+# Input
+- `v::VectorSpatial`: The spatial vector for which the squared norm is to be computed.
+
+# Output
+- The squared norm of the vector as a `Number`.
+
+# Aliases
+- `norm²`: An alias for this function.
+"""
+@inline norm2(v::VectorSpatial) = v.vector ⋅ v.vector
+const norm² = norm2
 
 
 # ----------------------------------------------------------------------------------------------- #
