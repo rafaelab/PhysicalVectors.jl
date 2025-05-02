@@ -96,6 +96,16 @@ end
 
 # ----------------------------------------------------------------------------------------------- #
 #
+@doc """
+	numberOfDimensions(v::AbstractPhysicalVector{D, T}) -> D
+
+Returns the number of dimensions of a given physical vector.
+"""
+@inline numberOfDimensions(::AbstractPhysicalVector{D, T}) where {D, T} = D
+
+
+# ----------------------------------------------------------------------------------------------- #
+#
 include("vector/spatial.jl")
 include("vector/lorentz.jl")
 
