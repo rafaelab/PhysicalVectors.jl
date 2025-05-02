@@ -13,17 +13,23 @@ jobs:
     name: Julia ${{ matrix.julia-version }} - ${{ matrix.os }} - ${{ matrix.julia-arch }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
-    strategy:
-      fail-fast: false
-      matrix:
-        julia-version: ["1.8", "1"]
-        os: [ubuntu-latest, macOS-latest]
-        julia-arch:
-          - x64
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Julia
+        uses: julia-actions/setup-julia@v1
+        with:
+          version: '1' 
+
+      - name: Install dependencies
+        run: julia --project -e 'using Pkg; Pkg.instantiate()'
+
+      - name: Run tests
+        run: julia --project -e 'using Pkg; Pkg.test()'
+
 
   docs:
     runs-on: ubuntu-latest
-
     steps:
         - uses: actions/checkout@v4
         - uses: julia-actions/setup-julia@v2
