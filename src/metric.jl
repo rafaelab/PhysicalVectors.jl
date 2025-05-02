@@ -35,6 +35,11 @@ Base.IndexStyle(::Type{<: AbstractMetric}) = IndexCartesian()
 
 # ----------------------------------------------------------------------------------------------- #
 #
+@inline numberOfDimensions(::AbstractMetric{D, T}) where {D, T} = D
+
+
+# ----------------------------------------------------------------------------------------------- #
+#
 @doc """
 	getMetric(m::AbstractMetric{D, T}) -> T
 
@@ -51,18 +56,7 @@ Retrieve the metric tensor from an `AbstractMetric` object.
 
 # ----------------------------------------------------------------------------------------------- #
 #
-@doc """
-	numberOfDimensions(m::AbstractMetric{D, T}) -> D
-
-Retrieve the number of dimensions (space + time) associated to this metric.
-"""
-@inline numberOfDimensions(::AbstractMetric{D, T}) where {D, T} = D
-
-
-# ----------------------------------------------------------------------------------------------- #
-#
 include("metric/euclid.jl")
-# include("metric/pseudoEuclidean.jl")
 include("metric/minkowski.jl")
 
 
