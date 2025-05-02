@@ -7,11 +7,6 @@ using PhysicalVectors
 
 DocMeta.setdocmeta!(PhysicalVectors, :DocTestSetup, :(using PhysicalVectors))
 
-# copy README.md to docs/src/index.md
-fileIn = joinpath(@__DIR__, "..", "README.md")
-fileOut = joinpath(@__DIR__, "..", "docs", "src/index.md")
-`cp $(fileIn) $(fileOut)` |> run
-
 
 makedocs(;
 	sitename = "PhysicalVectors.jl",
@@ -20,7 +15,8 @@ makedocs(;
 	modules = [PhysicalVectors],
 	pages = [
 		"Home" => "index.md",
-		"API" => "api.md"
+		"API" => "api.md",
+		"Examples" => "examples.md"
 		],
 	workdir = joinpath(@__DIR__, ".."),
 	doctest = true,
