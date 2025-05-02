@@ -9,24 +9,35 @@ on:
       - main
 
 jobs:
+  test:
+    name: Julia ${{ matrix.julia-version }} - ${{ matrix.os }} - ${{ matrix.julia-arch }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        julia-version: ["1.8", "1"]
+        os: [ubuntu-latest, macOS-latest]
+        julia-arch:
+          - x64
+
   docs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Set up Julia
-        uses: julia-actions/setup-julia@v1
-        with:
-          version: '1.8'
-
-      - name: Install dependencies
-        run: julia --project=docs -e 'using Pkg; Pkg.instantiate()'
-
-      - name: Build documentation
-        run: julia --project=docs docs/make.jl
-
-      - name: Deploy documentation
-        if: ${{ github.event_name == 'push' }}
-        run: julia --project=docs -e 'using Documenter; deploydocs()'
+        - uses: actions/checkout@v4
+        - uses: julia-actions/setup-julia@v2
+          with:
+            version: "1"
+        - name: Use Julia cache
+          uses: julia-actions/cache@v2
+        - run: |
+            julia --project=docs -e '
+              using Pkg
+              Pkg.develop(PackageSpec(path = pwd()))
+              Pkg.instantiate()'
+        - run: julia --project=docs docs/make.jl
+          env:
+            JULIA_PKG_SERVER: ""
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
