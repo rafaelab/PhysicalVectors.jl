@@ -1,5 +1,6 @@
 [project]
 name = "PhysicalVectorsDocumentation"
+uuid = "30bcef2a-88df-4e36-9d99-c39336b431e2"
 authors = ["Rafael Alves Batista <rafaelab@users.noreply.github.com>"]
 version = "0.3.6"
 
