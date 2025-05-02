@@ -24,6 +24,5 @@ makedocs(;
 
 deploydocs(;
 	repo = "github.com/rafaelab/PhysicalVectors.jl.git", 
-	push_preview = true,
 	versions = nothing
 	)
