@@ -1,13 +1,18 @@
 # PhysicalVectors.jl
 
 
+[![Build Status](https://github.com/rafaelab/PhysicalVectors.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/rafaelab/PhysicalVectors.jl/actions)
+[![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://rafaelab.github.io/PhysicalVectors.jl/stable)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
+
 PhysicalVectors.jl is a Julia package for representing and manipulating physical vectors in various geometric spaces, such as Euclidean and Lorentzian spaces. 
 It provides a flexible and efficient framework for working with vectors that have physical or geometric interpretations.
 
 The vectors can be implemented in any dimension. 
 For instance, a `VectorLorentz` can be implemented in 1+1D, which enables a wide range of analyses.
 
-This package is closely related to [KinematicalFrameworks](https://github.com/rafaelab/KinematicalFrameworks.jl), which is currently under development (private).
+This package is closely related to [PhysicalVectors](https://github.com/rafaelab/PhysicalVectors.jl), which is currently under development (private).
 Functionalities such as Lorentz boosts, for example, are being implemented directly in this other package.
 
 
