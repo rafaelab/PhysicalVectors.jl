@@ -1,12 +1,12 @@
+[deps]
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+PhysicalVectors = "45ff8ec7-7647-48a6-824b-610d14c24084"
+
+[compat]
+julia = "1.6"
+
 [project]
 name = "PhysicalVectorsDocumentation"
 uuid = "30bcef2a-88df-4e36-9d99-c39336b431e2"
 authors = ["Rafael Alves Batista <rafaelab@users.noreply.github.com>"]
 version = "0.3.6"
-
-[deps]
-Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
-
-[compat]
-julia = "1.6"
-
