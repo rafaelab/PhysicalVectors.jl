@@ -75,26 +75,6 @@ end
 
 
 # ----------------------------------------------------------------------------------------------- #
-#
-@doc """
-	norm2(v::VectorSpatial) -> Number
-
-Computes the squared norm (or squared magnitude) of a `VectorSpatial` object `v`.
-
-# Input
-- `v::VectorSpatial`: The spatial vector for which the squared norm is to be computed.
-
-# Output
-- The squared norm of the vector as a `Number`.
-
-# Aliases
-- `norm²`: An alias for this function.
-"""
-@inline norm2(v::VectorSpatial) = v.vector ⋅ v.vector
-const norm² = norm2
-
-
-# ----------------------------------------------------------------------------------------------- #
 # 
 @doc """
 	cross(v1::VectorSpatial, v2::VectorSpatial) -> VectorSpatial
