@@ -23,6 +23,32 @@ function cross end
 # ----------------------------------------------------------------------------------------------- #
 #
 @doc """
+	norm2(v::AbstractPhysicalVector{D, T}) -> T
+	norm2(v::AbstractPhysicalVector{D, T}, m::AbstractMetric{D, U}) -> T
+	norm²(args...) -> T
+
+Compute the squared norm of a Lorentz vector `v` using the default metric. 
+The norm is defined as the square root of the dot product of the vector with itself.
+
+# Input
+- `v::AbstractPhysicalVector`: the vector \\
+- `m::AbstractMetric`: the metric used to compute the dot product (optional)
+
+# Output
+- `T`: The computed norm2 of the Lorentz vector
+"""
+@inline norm2(v::AbstractPhysicalVector) = dot(v, v)
+
+@inline norm2(v::AbstractPhysicalVector{D, T}, m::AbstractMetric{D, U}) where {D, T, U} = begin
+	return dot(v, v, m)
+end
+
+const norm² = norm2
+
+
+# ----------------------------------------------------------------------------------------------- #
+#
+@doc """
 	norm(v::AbstractPhysicalVector{D, T}) -> T
 	norm(v::AbstractPhysicalVector{D, T}, m::AbstractMetric{D, U}) -> T
 
@@ -35,11 +61,9 @@ The norm is defined as the square root of the dot product of the vector with its
 # Output
 - `T`: The computed norm of the Lorentz vector
 """
-@inline norm(v::AbstractPhysicalVector) = sqrt(dot(v, v))
+@inline norm(v::AbstractPhysicalVector) = sqrt(norm²(v))
 
-@inline norm(v::AbstractPhysicalVector{D, T}, m::AbstractMetric{D, U}) where {D, T, U} = begin
-	return sqrt(dot(v, v, m))
-end
+@inline norm(v::AbstractPhysicalVector, metric::AbstractMetric) = sqrt(norm²(v, metric))
 
 
 # ----------------------------------------------------------------------------------------------- #
