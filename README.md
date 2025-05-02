@@ -2,7 +2,7 @@
 
 
 [![Build Status](https://github.com/rafaelab/PhysicalVectors.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/rafaelab/PhysicalVectors.jl/actions)
-[![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://rafaelab.github.io/PhysicalVectors.jl/stable)
+[![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://rafaelab.github.io/PhysicalVectors.jl/index.html)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 
