@@ -128,23 +128,9 @@ function dot(v1::VectorLorentz, v2::VectorLorentz, ::MetricEuclid)
 	return  @fastmath dot(v1, v2)
 end
 
-
-@doc """
-	dot(v1::VectorLorentz, v2::VectorLorentz) -> Number
-
-Computes the dot product of two Lorentz vectors `v1` and `v2` using their internal vector representations, assuming a Minkowski metric. \\
-
-# Input
-- `v1::VectorLorentz`: first Lorentz vector \\
-- `v2::VectorLorentz`: second Lorentz vector \\
-
-# Output
-- `Number`: the dot product of the two Lorentz vectors. 
-"""
-function dot(v1::VectorLorentz, v2::VectorLorentz) 
-	return @fastmath dot(v1, v2, MetricMinkowski(d, eltype(v1), MostlyPlus))
+function dot(v1::VectorLorentz{D, T1, V1}, v2::VectorLorentz{D, T2, V2}) where {D, T1, T2, V1, V2} 
+	return @fastmath dot(v1, v2, MetricMinkowski(D, eltype(v1), MostlyPlus))
 end
-
 
 
 # ----------------------------------------------------------------------------------------------- #
