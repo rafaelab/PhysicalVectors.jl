@@ -12,18 +12,21 @@ on:
     runs-on: ubuntu-latest
     steps:
         - uses: actions/checkout@v3
+        
         - uses: julia-actions/setup-julia@v2
           with:
             version: "1"
+
         - name: Use Julia cache
           uses: julia-actions/cache@v2
-        - run: |
+
+        - name: Install dependencies
+          run: |
             julia --project=docs -e '
               using Pkg
               Pkg.develop(PackageSpec(path = pwd()))
               Pkg.instantiate()'
         - run: julia --project=docs docs/make.jl
           env:
-            JULIA_PKG_SERVER: ""
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
