@@ -14,3 +14,9 @@ LinearAlgebra = "1.11.0"
 PhysicalConstants = "0.2.4"
 StaticArrays = "1.9.13"
 Unitful = "1.22.0"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
