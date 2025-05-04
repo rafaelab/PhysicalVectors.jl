@@ -24,7 +24,7 @@ jobs:
         - name: Add Cosmonstants to environment
           run: |
             git clone https://github.com/rafaelab/Cosmonstants.jl.git
-            julia --project -e '
+            julia --project=docs -e '
               using Pkg; Pkg.develop(path = "Cosmonstants.jl")
               Pkg.instantiate()'
 
