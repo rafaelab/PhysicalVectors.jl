@@ -1,12 +1,14 @@
 using Documenter
+using Pkg
+
+Pkg.develop(url = "https://github.com/rafaelab/Cosmonstants.jl")
+Pkg.instantiate()
 
 push!(LOAD_PATH, joinpath(@__DIR__, "..", "src"))
 using PhysicalVectors
 
 
-
 DocMeta.setdocmeta!(PhysicalVectors, :DocTestSetup, :(using PhysicalVectors))
-
 
 makedocs(;
 	sitename = "PhysicalVectors.jl",
