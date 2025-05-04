@@ -1,3 +1,6 @@
+export 
+	speedOfLightFor
+
 # ----------------------------------------------------------------------------------------------- #
 #
 @doc """
@@ -102,6 +105,24 @@ end
 Returns the number of dimensions of a given physical vector.
 """
 @inline numberOfDimensions(::AbstractPhysicalVector{D, T}) where {D, T} = D
+
+
+# ----------------------------------------------------------------------------------------------- #
+#
+@doc """
+	speedOfLightFor(v::AbstractPhysicalVector{D, T}) -> c
+
+Returns the speed of light in vacuum for a given physical vector.
+If T is a subtype of `Unitful.Quantity`, it returns the speed of light in the same units as the vector.
+If T is not a subtype of `Unitful.Quantity`, it returns the speed of light in SI units (m/s).
+
+# Input
+- `v`: a physical vector of type `AbstractPhysicalVector{D, T}` where `D` is the dimension and `T` is the element type \\
+
+# Output
+- `c`: the speed of light in the same units as the vector if T is a subtype of `Unitful.Quantity`, otherwise in SI units (m/s) \\
+"""
+@inline speedOfLightFor(::AbstractPhysicalVector{D, T}) where {D, T} = getUnitSystem(T).c_0
 
 
 # ----------------------------------------------------------------------------------------------- #
