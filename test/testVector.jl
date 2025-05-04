@@ -222,3 +222,22 @@ end
 	end
 
 end
+
+
+@testset "Unit Toggler Tests" begin
+	
+	v1a = VectorSpatial(SVector(1., 2., 3.))
+	v1b = VectorSpatial(SVector{3}([1., 2., 3.] .* u"m"))
+	v2a = VectorLorentz(1., 2., 3., 4.)
+	v2b = VectorLorentz([1., 2., 3., 4.] .* u"m / s")
+
+	@test speedOfLightFor(v1a) == getUnitSystem(eltype(v1a)).c_0
+	@test speedOfLightFor(v1b) == getUnitSystem(eltype(v1b)).c_0
+	@test speedOfLightFor(v2a) == getUnitSystem(eltype(v2a)).c_0
+	@test speedOfLightFor(v2b) == getUnitSystem(eltype(v2b)).c_0
+	@test speedOfLightFor(v1a) isa Real
+	@test speedOfLightFor(v1b) isa Unitful.AbstractQuantity
+	@test speedOfLightFor(v2a) isa Real
+	@test speedOfLightFor(v2b) isa Unitful.AbstractQuantity
+
+end
