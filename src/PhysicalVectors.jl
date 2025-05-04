@@ -4,6 +4,7 @@ using LinearAlgebra
 using StaticArrays
 using Unitful
 using Cosmonstants
+using Cosmonstants.Constants
 
 import LinearAlgebra:
 	Diagonal,
