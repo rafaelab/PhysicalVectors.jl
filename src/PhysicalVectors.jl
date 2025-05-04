@@ -21,6 +21,4 @@ include("vector.jl")
 include("algebra.jl")
 
 
-
-
 end
