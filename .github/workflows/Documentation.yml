@@ -23,10 +23,11 @@ jobs:
 
         - name: Install dependencies
           run: |
-            git clone https://github.com/rafaelab/Cosmonstants.jl.git
+            git clone https://github.com/rafaelab/Cosmonstants.jl.git deps/Cosmonstants.jl
             julia --project=docs -e '
+              push!(LOAD_PATH, "deps/Cosmonstants.jl/src")
+              using Cosmonstants
               using Pkg
-              Pkg.develop(PackageSpec(path = "Cosmonstants.jl"))
               Pkg.develop(PackageSpec(path = pwd()))
               Pkg.instantiate()'
         - run: julia --project=docs docs/make.jl
