@@ -21,17 +21,13 @@ jobs:
         - name: Use Julia cache
           uses: julia-actions/cache@v2
 
-        - name: Add Cosmonstants to environment
+        - name: Install dependencies
           run: |
             git clone https://github.com/rafaelab/Cosmonstants.jl.git
             julia --project=docs -e '
-              using Pkg; Pkg.develop(path = "Cosmonstants.jl")
-              Pkg.instantiate()'
-
-        - name: Install dependencies
-          run: |
-            julia --project=docs -e '
               using Pkg
+              Pkg.develop(path = "Cosmonstants.jl")
+              Pkg.instantiate()
               Pkg.develop(PackageSpec(path = pwd()))
               Pkg.instantiate()'
         - run: julia --project=docs docs/make.jl
