@@ -1,8 +1,8 @@
 using Documenter
 using Pkg
 
-Pkg.develop(url = "https://github.com/rafaelab/Cosmonstants.jl")
-Pkg.instantiate()
+# Pkg.develop(url = "https://github.com/rafaelab/Cosmonstants.jl")
+# Pkg.instantiate()
 
 push!(LOAD_PATH, joinpath(@__DIR__, "..", "src"))
 using PhysicalVectors
