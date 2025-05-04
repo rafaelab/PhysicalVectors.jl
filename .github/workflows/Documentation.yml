@@ -26,11 +26,8 @@ jobs:
             git clone https://github.com/rafaelab/Cosmonstants.jl.git
             julia --project=docs -e '
               using Pkg
-              Pkg.develop(path = "Cosmonstants.jl")
-              Pkg.instantiate()'
-            julia --project=docs -e '
-              using Pkg
-              Pkg.develop(PackageSpec(path = pwd()))
+              Pkg.develop(path = "..")
+              Pkg.develop(url = "https://github.com/rafaelab/Cosmonstants.jl")
               Pkg.instantiate()'
 
         - run: julia --project=docs docs/make.jl
