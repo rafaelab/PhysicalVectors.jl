@@ -27,13 +27,16 @@ jobs:
             mkdir -p deps
             git clone https://github.com/rafaelab/Cosmonstants.jl.git deps/Cosmonstants.jl
             julia --project -e '
-              using Pkg; Pkg.develop(path = "Cosmonstants.jl")
-              Pkg.instantiate()'
+              push!(LOAD_PATH, "deps/Cosmonstants.jl")
+              push!(LOAD_PATH, "deps/Cosmonstants.jl/src")
+              using Cosmonstants'
 
         - name: Install dependencies
           run: |
             julia --project=docs -e '
+              push!(LOAD_PATH, "deps/Cosmonstants.jl")
               push!(LOAD_PATH, "deps/Cosmonstants.jl/src")
+              using Cosmonstants
               using Pkg
               Pkg.develop(PackageSpec(path = pwd()))
               Pkg.instantiate()'
