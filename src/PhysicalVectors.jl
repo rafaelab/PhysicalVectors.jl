@@ -1,9 +1,9 @@
 module PhysicalVectors
 
 using LinearAlgebra
-using PhysicalConstants.CODATA2022
 using StaticArrays
 using Unitful
+using Cosmonstants
 
 import LinearAlgebra:
 	Diagonal,

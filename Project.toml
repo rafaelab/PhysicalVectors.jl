@@ -1,17 +1,17 @@
 name = "PhysicalVectors"
 uuid = "45ff8ec7-7647-48a6-824b-610d14c24084"
 authors = ["Rafael Alves Batista <rafaelab@users.noreply.github.com>"]
-version = "0.3.7"
+version = "0.4.0"
 
 [deps]
+Cosmonstants = "e0d7c536-3de7-4c2b-9b69-05e39c337d9a"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
-PhysicalConstants = "5ad8b20f-a522-5ce9-bfc9-ddf1d5bda6ab"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 
 [compat]
+Cosmonstants = "1.0.3"
 LinearAlgebra = "1.11.0"
-PhysicalConstants = "0.2.4"
 StaticArrays = "1.9.13"
 Unitful = "1.22.0"
 
