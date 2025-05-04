@@ -1,9 +1,7 @@
 [deps]
+Cosmonstants = "e0d7c536-3de7-4c2b-9b69-05e39c337d9a"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 PhysicalVectors = "45ff8ec7-7647-48a6-824b-610d14c24084"
 
-
-
 [compat]
 julia = "1.6"
-
