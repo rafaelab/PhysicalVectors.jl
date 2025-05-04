@@ -26,7 +26,7 @@ jobs:
             julia --project=docs -e '
               using Pkg
               Pkg.develop(PackageSpec(url = "https://github.com/rafaelab/Cosmonstants.jl.git"))
-              Pkg.develop(PackageSpec(path = pwd()))
+              Pkg.develop(path = ".")
               Pkg.instantiate()'
         - run: julia --project=docs docs/make.jl
           env:
