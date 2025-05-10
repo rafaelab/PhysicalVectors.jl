@@ -12,20 +12,20 @@ export
 
 A structure representing the Minkowski metric in an N-dimensional space.
 This metric is parameterised by:
-- `D`: the dimensionality of the space \\
-- `T`: the numeric type of the elements (e.g., `Float64`, `Int64`) \\
+- `D`: the dimensionality of the space 
+- `T`: the numeric type of the elements (e.g., `Float64`, `Int64`)
 
-This type is a subtype of `AbstractMetric{D, T}` and is used to represent and work with Euclidean metrics in a statically-typed manner. \
+This type is a subtype of `AbstractMetric{D, T}` and is used to represent and work with Euclidean metrics in a statically-typed manner.
 The last element of the metric is the time-dependent one.
 
 # Fields
-- `metric::V`: a static matrix that defines the Minkowski metric \\
+- `metric::V`: a static matrix that defines the Minkowski metric
 
 # Available constructors
-- `MetricMinkowski(d::Integer, ::Type{T}, ::Type{S})` \\
-- `MetricMinkowski(d::Integer, ::Type{S}, ::Type{T})` \\
-- `MetricMinkowski(d::Integer, ::Type{T})` \\
-- `MetricMinkowski(d::Integer, ::Type{S})` \\
+- `MetricMinkowski(d::Integer, ::Type{T}, ::Type{S})`
+- `MetricMinkowski(d::Integer, ::Type{S}, ::Type{T})`
+- `MetricMinkowski(d::Integer, ::Type{T})`
+- `MetricMinkowski(d::Integer, ::Type{S})`
 - `MetricMinkowski(d::Integer)`
 """
 struct MetricMinkowski{D, T, S} <: AbstractMetric{D, T}
@@ -72,12 +72,12 @@ MetricMinkowski(d::Integer) = MetricMinkowski(d, Float64, MostlyPlus)
 Determines the signature convention of the Minkowski metric. 
 
 # Input
-- `m::MetricMinkowski{D, T, MostlyPlus}`:  Minkowski metric object with "mostly plus" convention \\
-- `m::MetricMinkowski{D, T, MostlyMinus}`:  Minkowski metric object with "mostly minus" convention \\
+- `m::MetricMinkowski{D, T, MostlyPlus}`:  Minkowski metric object with "mostly plus" convention
+- `m::MetricMinkowski{D, T, MostlyMinus}`:  Minkowski metric object with "mostly minus" convention
 
 # Output
-- `true` if the metric is "mostly plus" \\
-- `false` if the metric is "mostly minus" \\
+- `true` if the metric is "mostly plus"
+- `false` if the metric is "mostly minus"
 """
 isMostlyPlus(::MetricMinkowski{D, T, MostlyPlus}) where {D, T} = true
 isMostlyPlus(::MetricMinkowski{D, T, MostlyMinus}) where {D, T} = false
