@@ -31,7 +31,7 @@ Compute the squared norm of a Lorentz vector `v` using the default metric.
 The norm is defined as the square root of the dot product of the vector with itself.
 
 # Input
-- `v::AbstractPhysicalVector`: the vector \\
+- `v::AbstractPhysicalVector`: the vector
 - `m::AbstractMetric`: the metric used to compute the dot product (optional)
 
 # Output

@@ -8,7 +8,7 @@ export
 @doc """
 	AbstractMetric{D, T}
 
-An abstract type representing a metric tensor in a `D`-dimensional space with elements of type `T`. \\
+An abstract type representing a metric tensor in a `D`-dimensional space with elements of type `T`.
 This type is a subtype of `AbstractMatrix{T}`, indicating that it behaves like a matrix and can  be used to define geometric properties such as distances and angles in a given space.
 
 # Parameters
