@@ -25,12 +25,12 @@ It is parameterised by:\\
 - `V`: sub-type of `StaticVector{D, T}` representing the underlying static vector \\
 
 # Fields
-- `vector::V`: the underlying static vector storing the data.
+- `vector::V`: the underlying static vector storing the data
 
 # Available constructors
-- `VectorLorentz(v::StaticVector{D, T})` \\
-- `VectorLorentz(v::AbstractVector{T})` \\
-- `VectorLorentz(vs::Vararg{<: Number})` \\
+- `VectorLorentz(v::StaticVector{D, T})`
+- `VectorLorentz(v::AbstractVector{T})`
+- `VectorLorentz(vs::Vararg{<: Number})`
 """
 struct VectorLorentz{D, T, V <: StaticVector{D, T}} <: AbstractPhysicalVector{D, T}
 	vector::V
@@ -68,8 +68,8 @@ Extracts the spatial part of a `VectorLorentz` object. \\
 The spatial part is obtained by taking all elements of the internal vector except the last one. \\
 
 # Input
-- `v::VectorLorentz`: a Lorentz vector from which the spatial part is to be extracted. \\
-- `m::AbstractMetric`: an `AbstractMetric`-type object; defaults to Minkowski \\
+- `v::VectorLorentz`: a Lorentz vector from which the spatial part is to be extracted. 
+- `m::AbstractMetric`: an `AbstractMetric`-type object; defaults to Minkowski
 
 # Output
 - `VectorSpatial`: an Euclidean vector containing the spatial components of the input Lorentz vector.
@@ -89,10 +89,10 @@ Extracts the temporal part of a `VectorLorentz` object. \\
 The temporal part is assumed to be the last element of the vector representation.
 
 # Input
-- `v::VectorLorentz`: Lorentz vector from which the temporal part is to be extracted. \\
+- `v::VectorLorentz`: Lorentz vector from which the temporal part is to be extracted
 
 # Output
-- A one-element vector containing the temporal part of the input `VectorLorentz`. \\
+- A one-element vector containing the temporal part of the input `VectorLorentz`
 """
 @inline getTemporalPart(v::VectorLorentz) = v.vector[end]
 
@@ -112,8 +112,8 @@ end
 Computes the dot product of two Lorentz vectors `v1` and `v2` using their internal vector representations, for a given metric `m`. \\
 
 # Input
-- `v1::VectorLorentz`: first Lorentz vector \\
-- `v2::VectorLorentz`: second Lorentz vector \\
+- `v1::VectorLorentz`: first Lorentz vector
+- `v2::VectorLorentz`: second Lorentz vector
 
 # Output
 "- `Number`: the dot product of the two Lorentz vectors."
@@ -147,19 +147,19 @@ along with constructors and utility methods for operations such as dot products
 and accessing temporal and spatial parts.
 
 # Input
-- `quantity`: name of the four-dimensional quantity to be generated \\
+- `quantity`: name of the four-dimensional quantity to be generated
 
 # Generated Code
-- A struct definition for the `quantity` type, which is a subtype of `AbstractPhysicalVector` \\
-- Constructors for the `quantity` type: \\
-	-- from a `VectorLorentz` object \\
-	-- from an `AbstractVector` \\
-	-- from a variable number of scalar arguments \\
-- Overloaded `Base.getproperty` to delegate property access to the underlying `VectorLorentz` \\
-- Utility functions: \\
-	-- `getTemporalPart`: the temporal part of the vector \\
-	-- `getSpatialPart`:retrieves the spatial part of the vector \\
-	-- `dot`: computes the dot product of two `quantity` objects, optionally using a metric \\
+- A struct definition for the `quantity` type, which is a subtype of `AbstractPhysicalVector`
+- Constructors for the `quantity` type:
+	-- from a `VectorLorentz` object
+	-- from an `AbstractVector`
+	-- from a variable number of scalar arguments
+- Overloaded `Base.getproperty` to delegate property access to the underlying `VectorLorentz`
+- Utility functions:
+	-- `getTemporalPart`: the temporal part of the vector
+	-- `getSpatialPart`:retrieves the spatial part of the vector
+	-- `dot`: computes the dot product of two `quantity` objects, optionally using a metric
 """
 macro generateFourVector(quantity)
 	quote
@@ -171,9 +171,9 @@ macro generateFourVector(quantity)
 		This is a usual `FourXXX` quantity. 
 		This structure allows for new methods and explicit dispatching.
 		# Parameters
-		- `D`: the dimensionality of the vector \\
-		- `T`: the numeric type of the vector elements (e.g., `AbstractFloat`) \\
-		- `V`: a subtype of `StaticVector` representing the underlying vector type \\
+		- `D`: the dimensionality of the vector
+		- `T`: the numeric type of the vector elements (e.g., `AbstractFloat`)
+		- `V`: a subtype of `StaticVector` representing the underlying vector type
 		"""
 		struct $(esc(quantity)){D, T, V <: StaticVector{D, T}} <: AbstractPhysicalVector{D, T}
 			vector::VectorLorentz{D, T, V}
@@ -221,10 +221,10 @@ end
 Computes the time component of a `FourPosition` object by dividing its temporal part by the speed of light `c`.
 
 # Input
-- `x::FourPosition`: four-position object from which the time component is extracted \\
+- `x::FourPosition`: four-position object from which the time component is extracted
 
 # Output
-- `AbstractFloat`: the time component of the four-position \\
+- `AbstractFloat`: the time component of the four-position
 """
 @inline getTime(x::FourPosition) = getTemporalPart(x) / c
 
@@ -237,10 +237,10 @@ Computes the time component of a `FourPosition` object by dividing its temporal 
 Retrieve the spatial part of a `FourPosition` object.
 
 # Input
-- `x::FourPosition`: four-position object from which the time component is extracted \\
+- `x::FourPosition`: four-position object from which the time component is extracted
 
 # Output
-- `VectorSpatial`: the spatial part of the four-position \\
+- `VectorSpatial`: the spatial part of the four-position
 """
 @inline getPosition(p::FourPosition) = getSpatialPart(p)
 
@@ -253,10 +253,10 @@ Compute the energy of a `FourMomentum` object `v`.
 The energy is calculated as the temporal part of the four-momentum multiplied by the speed of light `c`.
 
 # Input
-- `v::FourMomentum`: four-momentum object for which the energy is to be computed \\
+- `v::FourMomentum`: four-momentum object for which the energy is to be computed
 
 # Output
-- `AbstractFloat`: the energy corresponding to the given four-momentum in units of Joules \\
+- `AbstractFloat`: the energy corresponding to the given four-momentum in units of Joules
 """
 @inline getEnergy(v::FourMomentum) = getTemporalPart(v) * c
 
@@ -269,10 +269,10 @@ The energy is calculated as the temporal part of the four-momentum multiplied by
 Extracts the spatial part of a `FourMomentum` object.
 
 # Input
-- `v::FourMomentum`: the four-momentum object from which the spatial part (momentum) is to be extracted \\
+- `v::FourMomentum`: the four-momentum object from which the spatial part (momentum) is to be extracted
 
 # Output
-- The `VectorSpatial` representing the spatial momentum component of the input `FourMomentum` \\
+- The `VectorSpatial` representing the spatial momentum component of the input `FourMomentum`
 """
 @inline getMomentum(v::FourMomentum) = getSpatialPart(v)
 
@@ -286,10 +286,10 @@ Computes the charge density of a `FourCurrentDensity` object `v`.
 The charge density is calculated as the temporal part of the four-current divided by the speed of light `c`.
 
 # Input
-- `v::FourCurrentDensity`: four-current object for which the charge density is to be computed \\
+- `v::FourCurrentDensity`: four-current object for which the charge density is to be computed 
 
 # Output
-- `AbstractFloat`: the charge density corresponding to the given four-current in units of C/m³ \\
+- `AbstractFloat`: the charge density corresponding to the given four-current in units of C/m³
 """
 @inline getChargeDensity(v::FourCurrentDensity) = getTemporalPart(v) / c
 
@@ -302,10 +302,10 @@ The charge density is calculated as the temporal part of the four-current divide
 Extracts the spatial part of a `FourCurrentDensity` object.
 
 # Input
-- `v::FourCurrentDensity`: the four-current object from which the spatial part (current) is to be extracted \\
+- `v::FourCurrentDensity`: the four-current object from which the spatial part (current) is to be extracted
 
 # Output
-- The `VectorSpatial` representing the spatial current component of the input `FourCurrentDensity` \\
+- The `VectorSpatial` representing the spatial current component of the input `FourCurrentDensity`
 """
 @inline getCurrentDensity(v::FourCurrentDensity) = getSpatialPart(v)
 

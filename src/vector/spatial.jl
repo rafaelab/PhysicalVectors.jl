@@ -20,9 +20,9 @@ It is parameterised by:\\
 - `vector::V`: the underlying static vector storing the data.
 
 # Available constructors
-- `VectorSpatial(v::StaticVector{D, T})` \\
-- `VectorSpatial(v::AbstractVector{T})` \\
-- `VectorSpatial(vs::Vararg{<: Number})` \\
+- `VectorSpatial(v::StaticVector{D, T})`
+- `VectorSpatial(v::AbstractVector{T})`
+- `VectorSpatial(vs::Vararg{<: Number})`
 """
 struct VectorSpatial{D, T, V <: StaticVector{D, T}} <: AbstractPhysicalVector{D, T}
 	vector::V
@@ -57,12 +57,12 @@ The metric here makes no difference whatsoever, as the dot product is invariant 
 The method involving the metric is included for consistency with the Lorentzian case.\\
 
 # Input
-- `v1::VectorLorentz`: first Lorentz vector \\
-- `v2::VectorLorentz`: second Lorentz vector \\
-. (optional) `m::AbstractMetric`: an `AbstractMetric`-type object; defaults to Minkowski \\
+- `v1::VectorLorentz`: first Lorentz vector
+- `v2::VectorLorentz`: second Lorentz vector
+. (optional) `m::AbstractMetric`: an `AbstractMetric`-type object; defaults to Minkowski
 
 # Output
-- `Number`: the dot product of the two Lorentz vectors. \\
+- `Number`: the dot product of the two Lorentz vectors
 """
 function dot(v1::VectorSpatial, v2::VectorSpatial) 
 	return  @fastmath dot(v1.vector, v2.vector)
@@ -84,8 +84,8 @@ This function is only defined for 3-dimensional vectors.\\
 It throw a `DimensionMismatch` error if the vectors are not 3D.\\
 
 # Input
-- `v1::VectorSpatial`:  first 3D spatial vector \\
-- `v2::VectorSpatial`:  second 3D spatial vector \\
+- `v1::VectorSpatial`:  first 3D spatial vector
+- `v2::VectorSpatial`:  second 3D spatial vector
 
 # Output
 - A new `VectorSpatial` object representing the cross product of `v1` and `v2`.
