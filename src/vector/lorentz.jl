@@ -9,7 +9,9 @@ export
 	FourVelocity,
 	FourCurrentDensity,
 	getTime,
-	getPosition
+	getPosition,
+	getEnergy,
+	getMomentum
 
 # ----------------------------------------------------------------------------------------------- #
 # 
