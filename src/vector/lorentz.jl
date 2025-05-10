@@ -40,7 +40,7 @@ end
 
 
 
-function Base.getproperty(v::VectorLorentz{D, T}, u::Symbol) where {D, T}
+function Base.getproperty(v::VectorLorentz{D, T, V}, u::Symbol) where {D, T, V}
 	if u == :t
 		return v.vector[end]
 	end
@@ -74,10 +74,10 @@ The spatial part is obtained by taking all elements of the internal vector excep
 # Output
 - `VectorSpatial`: an Euclidean vector containing the spatial components of the input Lorentz vector.
 """
-@inline getSpatialPart(v::VectorLorentz{D, T}) where {D, T} = VectorSpatial(v.vector[1 : end - 1])
+@inline getSpatialPart(v::VectorLorentz) = VectorSpatial(v.vector[1 : end - 1])
 
 ######### METRIC NOT IMPLEMENTED CORRECTLY! 
-@inline getSpatialPart(v::VectorLorentz{D, T}, ::AbstractMetric{D, U}) where {D, T, U} = getSpatialPart(v)
+@inline getSpatialPart(v::VectorLorentz, ::AbstractMetric) = getSpatialPart(v.vector)
 
 
 # ----------------------------------------------------------------------------------------------- #
@@ -96,8 +96,8 @@ The temporal part is assumed to be the last element of the vector representation
 """
 @inline getTemporalPart(v::VectorLorentz) = v.vector[end]
 
+# NOT IMPLEMENTED CORRECTLY! IGNORES METRIC
 @inline function getTemporalPart(v::VectorLorentz, ::AbstractMetric)
-	# NOT IMPLEMENTED CORRECTLY! IGNORES METRIC
 	return getTemporalPart(v)
 end
 
@@ -162,7 +162,7 @@ and accessing temporal and spatial parts.
 	-- `dot`: computes the dot product of two `quantity` objects, optionally using a metric
 """
 macro generateFourVector(quantity)
-	quote
+	return quote
 		@doc """
 			struct $($(quantity)){D, T, V <: StaticVector{D, T}} <: AbstractPhysicalVector{D, T}
 		
@@ -191,20 +191,26 @@ macro generateFourVector(quantity)
 			return $(quantity)(VectorLorentz([vs...]))
 		end
 
-		Base.getproperty(q::$(esc(quantity)), u::Symbol) = getproperty(getfield(q, :vector), u)
-
-		getTemporalPart(q::$(esc(quantity))) = getTemporalPart(q.vector)
-
-		getSpatialPart(q::$(esc(quantity))) = getSpatialPart(q.vector)
-
-		dot(q1::$(esc(quantity)), q2::$(esc(quantity))) = dot(q1.vector, q2.vector)
-
-		dot(q1::$(esc(quantity)), q2::$(esc(quantity)), m::AbstractMetric{D, U}) where {D, U} = begin
-			return dot(q1.vector, q2.vector, m)
+		Base.getproperty(q::$(esc(quantity)), u::Symbol) = begin 
+			return u === :vector ? getfield(q, :vector) : getproperty(q.vector, u)
 		end
 
+		$(esc(:getTemporalPart))(q::$(esc(quantity))) = getTemporalPart(q.vector)
+
+		# getTemporalPart(q::$(esc(quantity)), m::AbstractMetric) = getTemporalPart(q.vector, m)
+
+		$(esc(:getSpatialPart))(q::$(esc(quantity))) = getSpatialPart(q.vector)
+
+		# getSpatialPart(q::$(esc(quantity)), m::AbstractMetric) = getSpatialPart(q.vector, m)
+
+		$(esc(:dot))(q1::$(esc(quantity)), q2::$(esc(quantity))) = dot(q1.vector, q2.vector)
+
+		$(esc(:dot))(q1::$(esc(quantity)), q2::$(esc(quantity)), m::AbstractMetric{D, U}) where {D, U} = begin
+			return dot(q1.vector, q2.vector, m)
+		end
 	end
 end
+
 
 # ----------------------------------------------------------------------------------------------- #
 #
@@ -212,6 +218,7 @@ end
 @generateFourVector FourVelocity
 @generateFourVector FourMomentum
 @generateFourVector FourCurrentDensity
+
 
 # ----------------------------------------------------------------------------------------------- #
 #
@@ -258,7 +265,7 @@ The energy is calculated as the temporal part of the four-momentum multiplied by
 # Output
 - `AbstractFloat`: the energy corresponding to the given four-momentum in units of Joules
 """
-@inline getEnergy(v::FourMomentum) = getTemporalPart(v) * c
+@inline getEnergy(v::FourMomentum) = getTemporalPart(v.vector) * c
 
 
 # ----------------------------------------------------------------------------------------------- #
@@ -274,7 +281,7 @@ Extracts the spatial part of a `FourMomentum` object.
 # Output
 - The `VectorSpatial` representing the spatial momentum component of the input `FourMomentum`
 """
-@inline getMomentum(v::FourMomentum) = getSpatialPart(v)
+@inline getMomentum(v::FourMomentum) = getSpatialPart(v.vector)
 
 
 # ----------------------------------------------------------------------------------------------- #
