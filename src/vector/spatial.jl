@@ -70,7 +70,7 @@ end
 
 function dot(v1::VectorSpatial, v2::VectorSpatial, m::AbstractMetric)
 	size(m)[1] == length(v1) || throw(DimensionMismatch("Metric and vector dimensions do not match."))
-	return  dot(v1, v2) ##### FIX!!!!!!!!!!!
+	return  dot(v1, v2) ##### FIX to include metric !!!!!!!!!!!
 end
 
 
