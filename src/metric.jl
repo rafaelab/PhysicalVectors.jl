@@ -78,9 +78,10 @@ Determines the signature convention of the Minkowski metric.
 - `false` if the metric is "mostly minus"
 """
 @inline isMostlyPlus(::AbstractMetric{D, T, MetricSignatureRiemannian}) where {D, T} = true
-@inline isMostlyMinus(::AbstractMetric{D, T, MetricSignatureRiemannian}) where {D, T} = false
 @inline isMostlyPlus(::AbstractMetric{D, T, MetricSignatureLorentzian{MostlyPlus}}) where {D, T} = true
 @inline isMostlyPlus(::AbstractMetric{D, T, MetricSignatureLorentzian{MostlyMinus}}) where {D, T} = false
+
+@inline isMostlyMinus(::AbstractMetric{D, T, MetricSignatureRiemannian}) where {D, T} = false
 @inline isMostlyMinus(::AbstractMetric{D, T, MetricSignatureLorentzian{MostlyPlus}}) where {D, T} = false
 @inline isMostlyMinus(::AbstractMetric{D, T, MetricSignatureLorentzian{MostlyMinus}}) where {D, T} = true
 
@@ -100,9 +101,6 @@ Retrieves the signature sign of the metric.
 getMetricSignatureSign(::Type{AbstractMetric{D, T, MetricSignatureRiemannian}}) where {D, T} = T(1)
 getMetricSignatureSign(::Type{AbstractMetric{D, T, MetricSignatureLorentzian{MostlyPlus}}}) where {D, T} = T(1)
 getMetricSignatureSign(::Type{AbstractMetric{D, T, MetricSignatureLorentzian{MostlyMinus}}}) where {D, T} = T(-1)
-
-
-
 
 
 # ----------------------------------------------------------------------------------------------- #
