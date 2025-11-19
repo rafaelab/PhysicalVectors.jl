@@ -228,13 +228,18 @@ end
 Computes the time component of a `FourPosition` object by dividing its temporal part by the speed of light `c`.
 
 # Input
-- `x::FourPosition`: four-position object from which the time component is extracted
+- `v::FourPosition`: four-position object from which the time component is extracted
 
 # Output
 - `AbstractFloat`: the time component of the four-position
 """
-@inline getTime(x::FourPosition) = getTemporalPart(x) / c
+@inline getTime(v::FourPosition{D, T, V}) where {D, T <: Real, V} = begin
+	return getTemporalPart(v.vector) / Unitless.c
+end
 
+@inline getTime(v::FourPosition{D, T, V}) where {D, T <: UnitType, V} = begin
+	return getTemporalPart(v.vector) / Unitfull.c
+end
 
 # ----------------------------------------------------------------------------------------------- #
 #
@@ -244,12 +249,13 @@ Computes the time component of a `FourPosition` object by dividing its temporal 
 Retrieve the spatial part of a `FourPosition` object.
 
 # Input
-- `x::FourPosition`: four-position object from which the time component is extracted
+- `v::FourPosition`: four-position object from which the time component is extracted
 
 # Output
 - `VectorSpatial`: the spatial part of the four-position
 """
 @inline getPosition(p::FourPosition) = getSpatialPart(p)
+
 
 # ----------------------------------------------------------------------------------------------- #
 #
@@ -265,7 +271,13 @@ The energy is calculated as the temporal part of the four-momentum multiplied by
 # Output
 - `AbstractFloat`: the energy corresponding to the given four-momentum in units of Joules
 """
-@inline getEnergy(v::FourMomentum) = getTemporalPart(v.vector) * c
+@inline getEnergy(v::FourMomentum{D, T, V}) where {D, T <: Real, V} = begin
+	return getTemporalPart(v.vector) * Unitless.c
+end
+
+@inline getEnergy(v::FourMomentum{D, T, V}) where {D, T <: UnitType, V} = begin
+	return getTemporalPart(v.vector) * Unitfull.c
+end
 
 
 # ----------------------------------------------------------------------------------------------- #
@@ -298,8 +310,13 @@ The charge density is calculated as the temporal part of the four-current divide
 # Output
 - `AbstractFloat`: the charge density corresponding to the given four-current in units of C/m³
 """
-@inline getChargeDensity(v::FourCurrentDensity) = getTemporalPart(v) / c
+@inline getChargeDensity(v::FourCurrentDensity{D, T, V}) where {D, T <: Real, V} = begin
+	return getTemporalPart(v.vector) / Unitless.c
+end
 
+@inline getChargeDensity(v::FourCurrentDensity{D, T, V}) where {D, T <: UnitType, V} = begin
+	return getTemporalPart(v.vector) / Unitfull.c
+end
 
 # ----------------------------------------------------------------------------------------------- #
 #
