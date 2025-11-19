@@ -92,35 +92,4 @@ Retrieve the signature convention type from a `MetricSignatureLorentzian` type.
 @inline getLorentzianSignatureConvention(::Type{MetricSignatureLorentzian{S}}) where {S} = S
 
 
-# # ----------------------------------------------------------------------------------------------- #
-# #
-# @doc """
-# 	getDiagonalSignature(d::Integer, ::Type{MetricSignatureRiemannian}, ::Type{T}) where {T <: AbstractFloat}
-# 	getDiagonalSignature(d::Integer, ::Type{MetricSignatureLorentzian{S}}, ::Type{T}) where {T <: AbstractFloat, S <: Union{MostlyPlus, MostlyMinus}}
-
-# Helper function that computes the signature vector for a Minkowski metric with `d` dimensions, where the metric is mostly positive/negative.
-# The resulting vector has `d-1` positive (negative) entries (1.0) followed by a single negative (positive) entry (-1.0).
-
-# # Input
-# - `d::Integer`: number of dimensions
-# - `::Type{MostlyPlus}`: type marker indicating a mostly positive metric
-# - `::Type{T}`: floating-point type of the resulting vector elements
-
-# # Output
-# A static vector (`SVector`) of type `T` representing the signature.
-# """
-# @inline getDiagonalSignature(d::Integer, ::Type{MetricSignatureRiemannian}, ::Type{T}) where {T <: AbstractFloat} = begin
-# 	return @SVector(ones(T, d))
-# end
-
-# @inline getDiagonalSignature(d::Integer, ::Type{MetricSignatureLorentzian{MostlyPlus}}, ::Type{T}) where {T <: AbstractFloat} = begin
-# 	v = @SVector(ones(T, d - 1))
-# 	return vcat(v, [-1])
-# end
-
-# @inline getDiagonalSignature(d::Integer, ::Type{MetricSignatureLorentzian{MostlyMinus}}, ::Type{T}) where {T <: AbstractFloat} = begin
-# 	return - getDiagonalSignature(d, MostlyPlus, T)
-# end
-
-
 # ----------------------------------------------------------------------------------------------- #
