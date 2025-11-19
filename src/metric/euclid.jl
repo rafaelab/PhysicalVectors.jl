@@ -24,7 +24,7 @@ This type is a subtype of `AbstractMetric{N, T}` and is used to represent and wo
 - `MetricEuclid(d::Integer)`
 - `MetricEuclid()`
 """
-struct MetricEuclid{D, T} <: AbstractMetric{D, T, MostlyPlus}
+struct MetricEuclid{D, T} <: AbstractMetric{D, T, MetricSignatureRiemannian}
 	tensor::SMatrix{D, D, T}
 end
 
