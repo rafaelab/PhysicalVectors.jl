@@ -22,8 +22,9 @@ This type is a subtype of `AbstractMetric{N, T}` and is used to represent and wo
 - `MetricEuclid(m::AbstractMatrix{D, D, T})`
 - `MetricEuclid(d::Integer, ::Type{T})`
 - `MetricEuclid(d::Integer)`
+- `MetricEuclid()`
 """
-struct MetricEuclid{D, T} <: AbstractMetric{D, T}
+struct MetricEuclid{D, T} <: AbstractMetric{D, T, MostlyPlus}
 	tensor::SMatrix{D, D, T}
 end
 
@@ -39,6 +40,8 @@ MetricEuclid(d::Integer, ::Type{T}) where {T <: AbstractFloat} = begin
 end
 
 MetricEuclid(d::Integer) = MetricEuclid(d, Float64)
+
+MetricEuclid() = MetricEuclid(1)
 
 
 # ----------------------------------------------------------------------------------------------- #
