@@ -1,9 +1,8 @@
 # ----------------------------------------------------------------------------------------------- #
 #
 export 
-	MetricMinkowski,
-	isMostlyMinus,
-	isMostlyPlus
+	MetricMinkowski
+
 
 # ----------------------------------------------------------------------------------------------- #
 #
@@ -27,8 +26,9 @@ The last element of the metric is the time-dependent one.
 - `MetricMinkowski(d::Integer, ::Type{T})`
 - `MetricMinkowski(d::Integer, ::Type{S})`
 - `MetricMinkowski(d::Integer)`
+- `MetricMinkowski()` (1-dimensional default)
 """
-struct MetricMinkowski{D, T, S} <: AbstractMetric{D, T}
+struct MetricMinkowski{D, T, S} <: AbstractMetric{D, T, MetricSignatureLorentzian{S}}
 	tensor::SMatrix{D, D, T}
 end
 
@@ -44,11 +44,13 @@ MetricMinkowski(m::AbstractMatrix{T}) where {T} = begin
 	return MetricMinkowski{d, T, S}(SMatrix{d, d, T}(m))
 end
 
-MetricMinkowski(d::Integer, ::Type{T}, ::Type{S}) where {T <: AbstractFloat, S <: MetricSignatureConvention} = begin
-	return MetricMinkowski(Diagonal(_getSignature(d, S, T)))
+MetricMinkowski(d::Integer, ::Type{T}, ::Type{S}) where {T <: AbstractFloat, S <: LorentzianMetricSignatureConvention} = begin
+	s = S <: MostlyPlus ? 1 : -1
+	v = SVector{d, T}(ntuple(i -> (i == d ? -s : s) * one(T), d))
+	return MetricMinkowski(Diagonal(v))
 end
 
-MetricMinkowski(d::Integer, ::Type{S}, ::Type{T}) where {T <: AbstractFloat, S <: MetricSignatureConvention} = begin
+MetricMinkowski(d::Integer, ::Type{S}, ::Type{T}) where {T <: AbstractFloat, S <: LorentzianMetricSignatureConvention} = begin
 	return MetricMinkowski(d, T, S)
 end
 
@@ -56,33 +58,13 @@ MetricMinkowski(d::Integer, ::Type{T}) where {T <: AbstractFloat} = begin
 	return MetricMinkowski(d, T, MostlyPlus)
 end
 
-MetricMinkowski(d::Integer, ::Type{S}) where {S <: MetricSignatureConvention} = begin
+MetricMinkowski(d::Integer, ::Type{S}) where {S <: LorentzianMetricSignatureConvention} = begin
 	return MetricMinkowski(d, Float64, S)
 end
 
 MetricMinkowski(d::Integer) = MetricMinkowski(d, Float64, MostlyPlus)
 
-
-# ----------------------------------------------------------------------------------------------- #
-#
-"""
-	isMostlyPlus(m::MetricMinkowski) -> Bool
-	isMostlyMinus(m::MetricMinkowski) -> Bool
-
-Determines the signature convention of the Minkowski metric. 
-
-# Input
-- `m::MetricMinkowski{D, T, MostlyPlus}`:  Minkowski metric object with "mostly plus" convention
-- `m::MetricMinkowski{D, T, MostlyMinus}`:  Minkowski metric object with "mostly minus" convention
-
-# Output
-- `true` if the metric is "mostly plus"
-- `false` if the metric is "mostly minus"
-"""
-isMostlyPlus(::MetricMinkowski{D, T, MostlyPlus}) where {D, T} = true
-isMostlyPlus(::MetricMinkowski{D, T, MostlyMinus}) where {D, T} = false
-isMostlyMinus(::MetricMinkowski{D, T, MostlyPlus}) where {D, T} = false
-isMostlyMinus(::MetricMinkowski{D, T, MostlyMinus}) where {D, T} = true
+MetricMinkowski() = MetricMinkowski(1, Float64, MostlyPlus)
 
 
 # ----------------------------------------------------------------------------------------------- #
