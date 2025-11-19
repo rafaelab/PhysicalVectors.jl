@@ -1,7 +1,7 @@
 name = "PhysicalVectors"
 uuid = "0da606dd-ac54-4f8f-aa9e-4b32a6316753"
 authors = ["Rafael Alves Batista <rafaelab@users.noreply.github.com>"]
-version = "0.4.4"
+version = "0.5.0"
 
 [deps]
 Cosmonstants = "e0d7c536-3de7-4c2b-9b69-05e39c337d9a"
