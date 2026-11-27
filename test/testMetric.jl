@@ -31,7 +31,7 @@
 	@testset "accessing metric properties" begin
 		m = MetricEuclid(3)
 		@test size(m) == (3, 3)
-		@test length(m) == 3
+		@test length(m) == 9
 		@test eltype(m) == Float64
 		@test m[1, 1] == 1.
 		@test m[2, 2] == 1.
@@ -98,7 +98,7 @@ end
 	@testset "property access" begin
 		m = MetricMinkowski(4, Float64, MostlyMinus)
 		@test size(m) == (4, 4)
-		@test length(m) == 4
+		@test length(m) == 16
 		@test eltype(m) == Float64
 		@test m[1, 1] == -1.
 		@test m[2, 2] == -1.
@@ -112,6 +112,47 @@ end
 		@test tensor == Diagonal([1., 1., 1., -1.])
 		@test size(tensor) == (4, 4)
 		@test eltype(tensor) == Float64
+	end
+
+	@testset "explicit metric contractions and dimensions" begin
+		for vectorType ∈ (VectorSpatial, VectorLorentz, FourPosition, FourVelocity, FourMomentum, FourCurrentDensity)
+			v = vectorType(1., 2.)
+			@test dot(v, v, MetricEuclid(2)) == 5.
+			@test dot(v, v, MetricEuclid([2. 0.; 0. 3.])) == 14.
+			@test dot(v, v, MetricEuclid([2. 1.; 1. 3.])) == 18.
+			@test dot(v, v, MetricMinkowski([2. 0.; 0. -3.])) == -10.
+			@test dot(v, v, MetricMinkowski([2. 1.; 1. -3.])) == -6.
+			@test_throws DimensionMismatch dot(v, v, MetricMinkowski(4))
+			@test_throws DimensionMismatch dot(v, vectorType(1.), MetricEuclid(2))
+			@test_throws DimensionMismatch dot(vectorType(1.), v, MetricEuclid(2))
+		end
+	end
+
+	@testset "interface and signatures" begin
+		for d ∈ (1, 2, 4), convention ∈ (MostlyPlus, MostlyMinus)
+			m = MetricMinkowski(d, Float32, convention)
+			@test length(m) == d * d
+			@test collect(vec(m)) == collect(vec(m.tensor))
+			@test numberOfDimensions(m) == d
+			@test isMetricLorentzian(m)
+			@test ! isMetricRiemannian(m)
+			@test isMostlyPlus(m) == (convention == MostlyPlus)
+			@test getMetricSignatureSign(m) == (convention == MostlyPlus ? 1 : -1)
+			@test getMetricSignatureSign(typeof(m)) == getMetricSignatureSign(m)
+			@test isMostlyPlus(MetricMinkowski(m.tensor)) == isMostlyPlus(m)
+			@test isMostlyPlus(MetricMinkowski(Matrix(m.tensor))) == isMostlyPlus(m)
+		end
+
+		m = MetricEuclid(3)
+		@test length(m) == 9
+		@test collect(vec(m)) == collect(vec(m.tensor))
+		@test isMetricRiemannian(m)
+		@test ! isMetricLorentzian(m)
+		@test getMetricSignatureSign(m) == getMetricSignatureSign(typeof(m)) == 1
+		for convention ∈ (MostlyPlus, MostlyMinus)
+			v = VectorLorentz(2.)
+			@test dot(v, v, MetricMinkowski(1, convention)) == (convention == MostlyPlus ? -4. : 4.)
+		end
 	end
 
 end
