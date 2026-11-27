@@ -1,6 +1,7 @@
 name: Documentation
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -11,6 +12,9 @@ on:
 jobs:
   docs:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
     steps:
         - uses: actions/checkout@v3
         
@@ -37,7 +41,14 @@ jobs:
               Pkg.develop(path = ".")
               Pkg.instantiate()'
 
-        - run: julia --startup-file=no --project=docs docs/make.jl
+        - name: Build and deploy documentation
+          run: julia --startup-file=no --project=docs docs/make.jl
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
+
+        # GITHUB_TOKEN pushes do not automatically trigger a Pages build.
+        - name: Publish GitHub Pages
+          if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+          run: gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
+          env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
