@@ -14,7 +14,8 @@ export
 Defines the `dot` function, which is typically used to compute the dot product of two vectors. 
 This is a placeholder definition and should be extended with specific methods for the desired types.
 """
-function dot end
+function dot 
+end
 
 
 # ----------------------------------------------------------------------------------------------- #
@@ -25,7 +26,8 @@ function dot end
 Defines the `cross` function commonly used for vector products. 
 This is a placeholder definition and should be extended with specific methods for the desired types.
 """
-function cross end
+function cross 
+end
 
 
 # ----------------------------------------------------------------------------------------------- #
@@ -39,8 +41,8 @@ Compute the squared norm of a Lorentz vector `v` using the default metric.
 The norm is defined as the square root of the dot product of the vector with itself.
 
 # Input
-- `v::AbstractPhysicalVector`: the vector
-- `m::AbstractMetric`: the metric used to compute the dot product (optional)
+- `v` [`AbstractPhysicalVector`]: the vector
+- `m` [`AbstractMetric`]: the metric used to compute the dot product (optional)
 
 # Output
 - `T`: The computed norm2 of the Lorentz vector
@@ -64,7 +66,7 @@ Compute the norm of a Lorentz vector `v` using the default metric.
 The norm is defined as the square root of the dot product of the vector with itself.
 
 # Input
-- `v::VectorLorentz`: the Lorentz vector whose norm is to be computed.
+- `v` [`VectorLorentz`]: the Lorentz vector whose norm is to be computed.
 
 # Output
 - `T`: The computed norm of the Lorentz vector

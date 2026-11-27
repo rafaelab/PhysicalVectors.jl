@@ -1,20 +1,19 @@
-# ----------------------------------------------------------------------------------------------- #
-# 
 export 
 	VectorSpatial,
 	norm2,
 	norm²
+
 
 # ----------------------------------------------------------------------------------------------- #
 # 
 @doc """
 	VectorSpatial{D, T, V <: StaticVector{D, T}}
 
-A structure representing a spatial vector in a physical vector space.\\ 
-It is parameterised by:\\
-- `D`: dimensionality of the vector \\
-- `T`: element type of the vector \\
-- `V`: sub-type of `StaticVector{D, T}` representing the underlying static vector \\
+A structure representing a spatial vector in a physical vector space.
+It is parameterised by:
+- `D`: dimensionality of the vector
+- `T`: element type of the vector
+- `V`: sub-type of `StaticVector{D, T}` representing the underlying static vector
 
 # Fields
 - `vector::V`: the underlying static vector storing the data.
@@ -31,8 +30,6 @@ end
 @physicalVectorConstructors VectorSpatial
 
 
-# ----------------------------------------------------------------------------------------------- #
-# 
 function Base.getproperty(v::VectorSpatial{D, T}, u::Symbol) where {D, T}
 	if D ≥ 1 && u == :x
 		return v.vector[1]
@@ -48,29 +45,55 @@ end
 
 # ----------------------------------------------------------------------------------------------- #
 # 
+function Base.:(+)(v1::VectorSpatial, v2::VectorSpatial)
+	length(v1) == length(v2) || throw(DimensionMismatch("Vector dimensions do not match."))
+	return VectorSpatial(v1.vector + v2.vector)
+end
+Base.:(+)(v::VectorSpatial) = VectorSpatial(+v.vector)
+Base.:(+)(v::VectorSpatial{D, T}, a::Number) where {D, T} = VectorSpatial(v.vector .+ a)
+Base.:(+)(a::Number, v::VectorSpatial) = Base.:(+)(v, a)
+
+function Base.:(-)(v1::VectorSpatial, v2::VectorSpatial)
+	length(v1) == length(v2) || throw(DimensionMismatch("Vector dimensions do not match."))
+	return VectorSpatial(v1.vector - v2.vector)
+end
+Base.:(-)(v::VectorSpatial) = VectorSpatial(-v.vector)
+Base.:(-)(v::VectorSpatial{D, T}, a::Number) where {D, T} = VectorSpatial(v.vector .- a)
+Base.:(-)(a::Number, v::VectorSpatial) = VectorSpatial(a .- v.vector)
+
+Base.:(*)(v::VectorSpatial{D, T}, a::Number) where {D, T} = VectorSpatial(v.vector * a)
+Base.:(*)(a::Number, v::VectorSpatial) = Base.:(*)(v, a)
+
+Base.:(/)(v::VectorSpatial{D, T}, a::Number) where {D, T} = VectorSpatial(v.vector / a)
+Base.:(/)(a::Number, v::VectorSpatial) = VectorSpatial(transpose(a / v.vector))
+
+
+
+# ----------------------------------------------------------------------------------------------- #
+# 
 @doc """
 	dot(v1::VectorSpatial{D, T1}, v2::VectorSpatial{D, T2}) -> Number
 	dot(v1::VectorSpatial{D, T1}, v2::VectorSpatial{D, T2}, m::AbstractMetric) -> Number
 
-Computes the dot product of two spatial vectors `v1` and `v2` using their internal vector representations, for a given metric `m`. \\
-The metric here makes no difference whatsoever, as the dot product is invariant under any metric, by construction.\\
-The method involving the metric is included for consistency with the Lorentzian case.\\
+Compute the Euclidean dot product when no metric is supplied.
+With a metric `m`, compute `dot(v1.vector, getMetricTensor(m) * v2.vector)`.
+For complex components, the first vector is conjugated, following `LinearAlgebra.dot`.
 
 # Input
-- `v1::VectorLorentz`: first Lorentz vector
-- `v2::VectorLorentz`: second Lorentz vector
-. (optional) `m::AbstractMetric`: an `AbstractMetric`-type object; defaults to Minkowski
+- `v1` [`VectorSpatial`]: first Spatial vector
+- `v2` [`VectorSpatial`]: second Spatial vector
+- `m` [`AbstractMetric`]: optional metric tensor; without it, use the Euclidean dot product
 
 # Output
-- `Number`: the dot product of the two Lorentz vectors
+- `Number`: the dot product of the two spatial vectors
 """
 function dot(v1::VectorSpatial, v2::VectorSpatial) 
 	return  @fastmath dot(v1.vector, v2.vector)
 end
 
 function dot(v1::VectorSpatial, v2::VectorSpatial, m::AbstractMetric)
-	size(m)[1] == length(v1) || throw(DimensionMismatch("Metric and vector dimensions do not match."))
-	return  dot(v1, v2) ##### FIX to include metric !!!!!!!!!!!
+	length(v1) == length(v2) == size(m, 1) || throw(DimensionMismatch("Metric and vector dimensions do not match."))
+	return dot(v1.vector, getMetricTensor(m) * v2.vector)
 end
 
 
@@ -79,13 +102,13 @@ end
 @doc """
 	cross(v1::VectorSpatial, v2::VectorSpatial) -> VectorSpatial
 
-Compute the cross product of two 3D spatial vectors `v1` and `v2`.\\
-This function is only defined for 3-dimensional vectors.\\
-It throw a `DimensionMismatch` error if the vectors are not 3D.\\
+Compute the cross product of two 3D spatial vectors `v1` and `v2`.
+This function is only defined for 3-dimensional vectors.
+It throws a `DimensionMismatch` error if the vectors are not 3D.
 
 # Input
-- `v1::VectorSpatial`:  first 3D spatial vector
-- `v2::VectorSpatial`:  second 3D spatial vector
+- `v1` [`VectorSpatial`]: first 3D spatial vector
+- `v2` [`VectorSpatial`]: second 3D spatial vector
 
 # Output
 - A new `VectorSpatial` object representing the cross product of `v1` and `v2`.

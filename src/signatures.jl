@@ -1,5 +1,3 @@
-# ----------------------------------------------------------------------------------------------- #
-#
 export
 	MetricSignatureRiemannian,
 	MetricSignatureLorentzian,
@@ -38,8 +36,8 @@ Abstract type representing a convention for metric signature in spacetime geomet
 This is implemented for completeness. The mostly-plus signature is obviously the better one, despite the wide adoption of the mostly-minus convetion in high-energy physics.
 
 # Sub-types
-- `MostlyMinus`: Represents the "mostly minus" convention, where the metric signature is typically (+, -, -, -, ...)
-- `MostlyPlus`: Represents the "mostly plus" convention, where the metric signature is typically (-, +, +, +, ...)
+- `MostlyMinus`: represents the "mostly minus" convention, where the metric signature is typically (+, -, -, -, ...)
+- `MostlyPlus`: represents the "mostly plus" convention, where the metric signature is typically (-, +, +, +, ...)
 
 These types can be used to specify the metric signature convention in calculations involving spacetime metrics.
 """

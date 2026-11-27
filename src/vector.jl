@@ -3,12 +3,12 @@
 @doc """
 	AbstractPhysicalVector{D, T}
 
-An abstract type representing a physical vector with a specific dimension `D` and element type `T`. \\
+An abstract type representing a physical vector with a specific dimension `D` and element type `T`.\\
 This type inherits from `AbstractVector{T}` and serves as a base type for defining vectors that have physical or geometric interpretations.
 
 # Parameters
-- `D`: dimension of the vector (e.g., 2 for 2D, 3 for 3D) \\
-- `T`: type of the elements in the vector (e.g., `Float64`) \\
+- `D`: dimension of the vector (e.g., 2 for 2D, 3 for 3D)
+- `T`: type of the elements in the vector (e.g., `Float64`)
 
 This type is intended to be extended by concrete implementations that define specific behaviours and properties of physical vectors.
 For instance, `VectorLorentz` and `VectorEuclidean` are such concrete sub-types.
@@ -16,12 +16,10 @@ For instance, `VectorLorentz` and `VectorEuclidean` are such concrete sub-types.
 abstract type AbstractPhysicalVector{D, T} <: AbstractVector{T} end
 
 
-# ----------------------------------------------------------------------------------------------- #
-#
 
 Base.length(::AbstractPhysicalVector{D, T}) where {D, T} = D
 
-Base.size(::AbstractPhysicalVector{D, T}) where {D, T} = (D,)
+Base.size(::AbstractPhysicalVector{D, T}) where {D, T} = (D, )
 
 Base.eltype(::AbstractPhysicalVector{D, T}) where {D, T} = T
 
@@ -39,54 +37,34 @@ end
 @doc """
 	@physicalVectorConstructors(vector)
 
-A macro that generates constructor methods for a custom `VectorXXX` sub-typing from `AbstractPhysicalVector`.\\
-This macro is not exported and is intended for internal use within the package. \\
-The generated constructors allow for the creation of `VectorXXX` instances from different input types, including: \\
-1. Static Vectors (`SVector`):\\
-. Accepts an `SVector{D, T}` where `D` is the dimension and `T` is a subtype of `Number`. \\
-. Returns an instance of `vector` parameterised by `D`, `T`, and the type of the input vector. \\
-2. Abstract Vectors: \\
-. Accepts an `AbstractVector{T}` where `T` is a subtype of `Number`. \\
-. Converts the input vector to a mutable `MVector` and returns an instance of `vector` parameterised by the length of the input vector, `T`, and the type of the converted vector. \\
-3. Varargs: \\
-. Accepts a variable number of arguments of type `T` (where `T` is a subtype of `Number`). \\
-. Constructs an `MVector` from the arguments and returns an instance of `vector`. \\
+A macro that generates constructor methods for a custom `VectorXXX` sub-typing from `AbstractPhysicalVector`.
+This macro is not exported and is intended for internal use within the package.
+The generated constructors allow for the creation of `VectorXXX` instances from different input types, including:
+1. Static Vectors (`SVector`):
+. Accepts an `SVector{D, T}` where `D` is the dimension and `T` is a subtype of `Number`. 
+. Returns an instance of `vector` parameterised by `D`, `T`, and the type of the input vector. 
+2. Abstract Vectors: 
+. Accepts an `AbstractVector{T}` where `T` is a subtype of `Number`. 
+. Converts the input vector to a mutable `MVector` and returns an instance of `vector` parameterised by the length of the input vector, `T`, and the type of the converted vector. 
+3. Varargs:
+. Accepts a variable number of arguments of type `T` (where `T` is a subtype of `Number`). 
+. Constructs an `MVector` from the arguments and returns an instance of `vector`. 
 This macro simplifies the creation of constructors for custom vector types, ensuring compatibility with various input formats.
 """
 macro physicalVectorConstructors(vector)
 	quote
 
 		$(esc(vector))(v::StaticVector{D, T}) where {D, T <: Number} = begin
-			return $(vector){D, T, typeof(v)}(v)
+			return $(esc(vector)){D, T, typeof(v)}(v)
 		end
 
 		$(esc(vector))(v::AbstractVector{T}) where {T <: Number} = begin
 			u = MVector{length(v), T}(v)
-			return $(vector){length(v), T, typeof(u)}(u)
+			return $(esc(vector)){length(v), T, typeof(u)}(u)
 		end
 
-		$(esc(vector))(vs::Vararg{T}) where {T <: Number} = begin
-			return $(vector)([vs...])
-		end
-
-		Base.:(+)(v1::$(esc(vector)), v2::$(esc(vector))) = begin
-			return $(esc(vector))(v1.vector .+ v2.vector)
-		end
-
-		Base.:(-)(v1::$(esc(vector)), v2::$(esc(vector))) = begin
-			return $(esc(vector))(v1.vector .- v2.vector)
-		end
-
-		Base.:(*)(v::$(esc(vector)), a::Number) = begin
-			return $(esc(vector))(v.vector .* a)
-		end
-
-		Base.:(*)(a::Number, v::$(esc(vector))) = begin
-			return $(esc(vector))(a .* v.vector)
-		end
-
-		Base.:(/)(v::$(esc(vector)), a::Number) = begin
-			return $(esc(vector))(v.vector ./ a)
+		$(esc(vector))(vs::Number...) = begin
+			return $(esc(vector))([promote(vs...)...])
 		end
 
 	end
@@ -102,10 +80,13 @@ Returns the number of dimensions of a given physical vector.
 """
 @inline numberOfDimensions(::AbstractPhysicalVector{D, T}) where {D, T} = D
 
+
 # ----------------------------------------------------------------------------------------------- #
 #
 include("vector/spatial.jl")
 include("vector/lorentz.jl")
+
+
 
 
 # ----------------------------------------------------------------------------------------------- #

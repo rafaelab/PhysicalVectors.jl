@@ -1,5 +1,3 @@
-# ----------------------------------------------------------------------------------------------- #
-#
 export 
 	MetricMinkowski
 
@@ -32,22 +30,26 @@ struct MetricMinkowski{D, T, S} <: AbstractMetric{D, T, MetricSignatureLorentzia
 	tensor::SMatrix{D, D, T}
 end
 
-MetricMinkowski(m::SMatrix{D, D, T}) where {D, T} = begin
-	S = first(m) > 0 ? MostlyPlus : MostlyMinus
-	return MetricMinkowski{D, T, S}(m)
-end
-
 MetricMinkowski(m::AbstractMatrix{T}) where {T} = begin
 	d = size(m, 1)
-	size(m) == (d, d) || throw(DimensionMismatch("Matrix must be square"))
-	S = first(m) > 0 ? MostlyPlus : MostlyMinus
+	size(m) == (d, d) || throw(DimensionMismatch("Matrix must be square."))
+	d > 0 || throw(ArgumentError("A Minkowski metric needs a temporal dimension."))
+
+	temporalCoefficient = m[d, d]
+	if temporalCoefficient == 0
+		throw(ArgumentError("The temporal diagonal entry must have a nonzero sign"))
+	else
+		S = temporalCoefficient < 0 ? MostlyPlus : MostlyMinus
+	end
+
 	return MetricMinkowski{d, T, S}(SMatrix{d, d, T}(m))
 end
 
 MetricMinkowski(d::Integer, ::Type{T}, ::Type{S}) where {T <: AbstractFloat, S <: LorentzianMetricSignatureConvention} = begin
+	d > 0 || throw(ArgumentError("A Minkowski metric needs a temporal dimension"))
 	s = S <: MostlyPlus ? 1 : -1
 	v = SVector{d, T}(ntuple(i -> (i == d ? -s : s) * one(T), d))
-	return MetricMinkowski(Diagonal(v))
+	return MetricMinkowski{d, T, S}(SMatrix{d, d, T}(Diagonal(v)))
 end
 
 MetricMinkowski(d::Integer, ::Type{S}, ::Type{T}) where {T <: AbstractFloat, S <: LorentzianMetricSignatureConvention} = begin

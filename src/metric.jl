@@ -1,5 +1,3 @@
-# ----------------------------------------------------------------------------------------------- #
-#
 export
 	getMetricTensor,
 	getMetricSignatureSign,
@@ -29,7 +27,7 @@ abstract type AbstractMetric{D, T, S} <: AbstractMatrix{T} end
 
 # ----------------------------------------------------------------------------------------------- #
 #
-Base.length(::AbstractMetric{D, T, S}) where {D, T, S} = D
+Base.length(::AbstractMetric{D, T, S}) where {D, T, S} = D * D
 
 Base.size(::AbstractMetric{D, T, S}) where {D, T, S} = (D, D)
 
@@ -39,9 +37,6 @@ Base.getindex(m::AbstractMetric, i::Integer, j::Integer) = m.tensor[i, j]
 
 Base.IndexStyle(::Type{<: AbstractMetric}) = IndexCartesian()
 
-
-# ----------------------------------------------------------------------------------------------- #
-#
 @inline numberOfDimensions(::AbstractMetric{D, T, S}) where {D, T, S} = D
 
 
@@ -65,13 +60,11 @@ Retrieve the metric tensor from an `AbstractMetric` object.
 #
 @doc """
 	isMostlyPlus(m::MetricMinkowski) -> Bool
-	isMostlyMinus(m::MetricMinkowski) -> Bool
 
 Determines the signature convention of the Minkowski metric. 
 
 # Input
-- `m::MetricMinkowski{D, T, MostlyPlus}`:  Minkowski metric object with "mostly plus" convention
-- `m::MetricMinkowski{D, T, MostlyMinus}`:  Minkowski metric object with "mostly minus" convention
+- `m` [`MetricMinkowski`]:  Minkowski metric object
 
 # Output
 - `true` if the metric is "mostly plus"
@@ -81,6 +74,19 @@ Determines the signature convention of the Minkowski metric.
 @inline isMostlyPlus(::AbstractMetric{D, T, MetricSignatureLorentzian{MostlyPlus}}) where {D, T} = true
 @inline isMostlyPlus(::AbstractMetric{D, T, MetricSignatureLorentzian{MostlyMinus}}) where {D, T} = false
 
+
+@doc """
+	isMostlyMinus(m::MetricMinkowski) -> Bool
+
+Determines the signature convention of the Minkowski metric. 
+
+# Input
+- `m` [`MetricMinkowski`]:  Minkowski metric object
+
+# Output
+- `true` if the metric is "mostly minus"
+- `false` if the metric is "mostly plus"
+"""
 @inline isMostlyMinus(::AbstractMetric{D, T, MetricSignatureRiemannian}) where {D, T} = false
 @inline isMostlyMinus(::AbstractMetric{D, T, MetricSignatureLorentzian{MostlyPlus}}) where {D, T} = false
 @inline isMostlyMinus(::AbstractMetric{D, T, MetricSignatureLorentzian{MostlyMinus}}) where {D, T} = true
@@ -98,9 +104,10 @@ Retrieves the signature sign of the metric.
 - `+1` for "mostly plus" convention
 - `-1` for "mostly minus" convention
 """
-getMetricSignatureSign(::Type{AbstractMetric{D, T, MetricSignatureRiemannian}}) where {D, T} = T(1)
-getMetricSignatureSign(::Type{AbstractMetric{D, T, MetricSignatureLorentzian{MostlyPlus}}}) where {D, T} = T(1)
-getMetricSignatureSign(::Type{AbstractMetric{D, T, MetricSignatureLorentzian{MostlyMinus}}}) where {D, T} = T(-1)
+@inline getMetricSignatureSign(::Type{<: AbstractMetric{D, T, MetricSignatureRiemannian}}) where {D, T} = T(1)
+@inline getMetricSignatureSign(::Type{<: AbstractMetric{D, T, MetricSignatureLorentzian{MostlyPlus}}}) where {D, T} = T(1)
+@inline getMetricSignatureSign(::Type{<: AbstractMetric{D, T, MetricSignatureLorentzian{MostlyMinus}}}) where {D, T} = T(-1)
+getMetricSignatureSign(m::AbstractMetric) = getMetricSignatureSign(typeof(m))
 
 
 # ----------------------------------------------------------------------------------------------- #
@@ -112,14 +119,14 @@ getMetricSignatureSign(::Type{AbstractMetric{D, T, MetricSignatureLorentzian{Mos
 Determines whether the given metric is Riemannian or Lorentzian based on its signature.
 
 # Input
-- `m::AbstractMetric{D, T, S}`: an instance of a subtype of `AbstractMetric`, where `D` is the dimensionality, `T` is the type of the metric tensor, and `S` is the metric signature convention.
+- `m` [`AbstractMetric`]: an instance of a subtype of `AbstractMetric`, where `D` is the dimensionality, `T` is the type of the metric tensor, and `S` is the metric signature convention.
 
 # Output
 - `true` if the metric is Riemannian
 - `false` if the metric is Lorentzian
 """
-isMetricRiemannian(::AbstractMetric{D, T, MetricSignatureRiemannian}) where {D, T} = true
-isMetricRiemannian(::AbstractMetric{D, T, MetricSignatureLorentzian}) where {D, T} = false
+@inline isMetricRiemannian(::AbstractMetric{D, T, MetricSignatureRiemannian}) where {D, T} = true
+@inline isMetricRiemannian(::AbstractMetric{D, T, MetricSignatureLorentzian{S}}) where {D, T, S} = false
 
 
 # ----------------------------------------------------------------------------------------------- #
@@ -131,14 +138,14 @@ isMetricRiemannian(::AbstractMetric{D, T, MetricSignatureLorentzian}) where {D, 
 Determines whether the given metric is Riemannian or Lorentzian based on its signature.
 
 # Input
-- `m::AbstractMetric{D, T, S}`: an instance of a subtype of `AbstractMetric`, where `D` is the dimensionality, `T` is the type of the metric tensor, and `S` is the metric signature convention.
+- `m` [`AbstractMetric`]: an instance of a subtype of `AbstractMetric`, where `D` is the dimensionality, `T` is the type of the metric tensor, and `S` is the metric signature convention.
 
 # Output
 - `true` if the metric is Lorentzian
 - `false` if the metric is Riemannian
 """
-isMetricLorentzian(::AbstractMetric{D, T, MetricSignatureRiemannian}) where {D, T} = false
-isMetricLorentzian(::AbstractMetric{D, T, MetricSignatureLorentzian}) where {D, T} = true
+@inline isMetricLorentzian(::AbstractMetric{D, T, MetricSignatureRiemannian}) where {D, T} = false
+@inline isMetricLorentzian(::AbstractMetric{D, T, MetricSignatureLorentzian{S}}) where {D, T, S} = true
 
 
 # ----------------------------------------------------------------------------------------------- #

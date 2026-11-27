@@ -1,5 +1,3 @@
-# ----------------------------------------------------------------------------------------------- #
-# 
 export 
 	VectorLorentz,
 	getSpatialPart,
@@ -12,6 +10,7 @@ export
 	getPosition,
 	getEnergy,
 	getMomentum
+
 
 # ----------------------------------------------------------------------------------------------- #
 # 
@@ -41,20 +40,15 @@ end
 
 
 function Base.getproperty(v::VectorLorentz{D, T, V}, u::Symbol) where {D, T, V}
-	if u == :t
+	if u === :t
 		return v.vector[end]
+	elseif u === :x && D ≥ 2
+		return v.vector[1]
+	elseif u === :y && D ≥ 3
+		return v.vector[2]
+	elseif u === :z && D ≥ 4
+		return v.vector[3]
 	end
-
-	if D ≤ 4
-		if u == :x
-			return v.vector[1]
-		elseif u == :y && D ≥ 2
-			return v.vector[2]
-		elseif u == :z && D ≥ 3
-			return v.vector[3]
-		end
-	end
-	
 	return getfield(v, u)
 end
 
@@ -68,16 +62,17 @@ Extracts the spatial part of a `VectorLorentz` object. \\
 The spatial part is obtained by taking all elements of the internal vector except the last one. \\
 
 # Input
-- `v::VectorLorentz`: a Lorentz vector from which the spatial part is to be extracted. 
-- `m::AbstractMetric`: an `AbstractMetric`-type object; defaults to Minkowski
+- `v` [`VectorLorentz`]: a Lorentz vector from which the spatial part is to be extracted. 
+- `m` [`AbstractMetric`]: an `AbstractMetric`-type object; defaults to Minkowski
 
 # Output
 - `VectorSpatial`: an Euclidean vector containing the spatial components of the input Lorentz vector.
 """
 @inline getSpatialPart(v::VectorLorentz) = VectorSpatial(v.vector[1 : end - 1])
-
-######### METRIC NOT IMPLEMENTED CORRECTLY! 
-@inline getSpatialPart(v::VectorLorentz, ::AbstractMetric) = getSpatialPart(v.vector)
+@inline function getSpatialPart(v::VectorLorentz, m::AbstractMetric)
+	length(v) == size(m, 1) || throw(DimensionMismatch("Metric and vector dimensions do not match."))
+	return getSpatialPart(v)
+end
 
 
 # ----------------------------------------------------------------------------------------------- #
@@ -89,17 +84,41 @@ Extracts the temporal part of a `VectorLorentz` object. \\
 The temporal part is assumed to be the last element of the vector representation.
 
 # Input
-- `v::VectorLorentz`: Lorentz vector from which the temporal part is to be extracted
+- `v` [`VectorLorentz`]: Lorentz vector from which the temporal part is to be extracted
 
 # Output
 - A one-element vector containing the temporal part of the input `VectorLorentz`
 """
 @inline getTemporalPart(v::VectorLorentz) = v.vector[end]
-
-# NOT IMPLEMENTED CORRECTLY! IGNORES METRIC
-@inline function getTemporalPart(v::VectorLorentz, ::AbstractMetric)
+@inline function getTemporalPart(v::VectorLorentz, m::AbstractMetric)
+	length(v) == size(m, 1) || throw(DimensionMismatch("Metric and vector dimensions do not match."))
 	return getTemporalPart(v)
 end
+
+
+# ----------------------------------------------------------------------------------------------- #
+# 
+function Base.:(+)(v1::VectorLorentz, v2::VectorLorentz)
+	length(v1) == length(v2) || throw(DimensionMismatch("Vector dimensions do not match."))
+	return VectorLorentz(v1.vector + v2.vector)
+end
+Base.:(+)(v::VectorLorentz) = VectorLorentz(+v.vector)
+Base.:(+)(v::VectorLorentz{D, T}, a::Number) where {D, T} = VectorLorentz(v.vector .+ a)
+Base.:(+)(a::Number, v::VectorLorentz) = Base.:(+)(v, a)
+
+function Base.:(-)(v1::VectorLorentz, v2::VectorLorentz)
+	length(v1) == length(v2) || throw(DimensionMismatch("Vector dimensions do not match."))
+	return VectorLorentz(v1.vector - v2.vector)
+end
+Base.:(-)(v::VectorLorentz) = VectorLorentz(-v.vector)
+Base.:(-)(v::VectorLorentz{D, T}, a::Number) where {D, T} = VectorLorentz(v.vector .- a)
+Base.:(-)(a::Number, v::VectorLorentz) = VectorLorentz(a .- v.vector)
+
+Base.:(*)(v::VectorLorentz{D, T}, a::Number) where {D, T} = VectorLorentz(v.vector * a)
+Base.:(*)(a::Number, v::VectorLorentz) = Base.:(*)(v, a)
+
+Base.:(/)(v::VectorLorentz{D, T}, a::Number) where {D, T} = VectorLorentz(v.vector / a)
+Base.:(/)(a::Number, v::VectorLorentz) = VectorLorentz(transpose(a / v.vector))
 
 
 # ----------------------------------------------------------------------------------------------- #
@@ -112,26 +131,20 @@ end
 Computes the dot product of two Lorentz vectors `v1` and `v2` using their internal vector representations, for a given metric `m`. \\
 
 # Input
-- `v1::VectorLorentz`: first Lorentz vector
-- `v2::VectorLorentz`: second Lorentz vector
+- `v1` [`VectorLorentz`]: first Lorentz vector
+- `v2` [`VectorLorentz`]: second Lorentz vector
 
 # Output
 "- `Number`: the dot product of the two Lorentz vectors."
 """
-function dot(v1::VectorLorentz, v2::VectorLorentz, ::MetricMinkowski{D, U, MostlyMinus}) where {D, U}
-	return  @fastmath getTemporalPart(v1) * getTemporalPart(v2) - dot(getSpatialPart(v1), getSpatialPart(v2))
+function dot(v1::VectorLorentz, v2::VectorLorentz, m::AbstractMetric)
+	length(v1) == length(v2) == size(m, 1) || throw(DimensionMismatch("Metric and vector dimensions do not match."))
+	return dot(v1.vector, getMetricTensor(m) * v2.vector)
 end
 
-function dot(v1::VectorLorentz, v2::VectorLorentz, ::MetricMinkowski{D, U, MostlyPlus}) where {D, U}
-	return  @fastmath dot(getSpatialPart(v1), getSpatialPart(v2)) - getTemporalPart(v1) * getTemporalPart(v2)
-end
-
-function dot(v1::VectorLorentz, v2::VectorLorentz, ::MetricEuclid) 
-	return  @fastmath dot(v1, v2)
-end
-
-function dot(v1::VectorLorentz{D, T1, V1}, v2::VectorLorentz{D, T2, V2}) where {D, T1, T2, V1, V2} 
-	return @fastmath dot(v1, v2, MetricMinkowski(D, eltype(v1), MostlyPlus))
+function dot(v1::VectorLorentz, v2::VectorLorentz)
+	length(v1) == length(v2) || throw(DimensionMismatch("Vector dimensions do not match."))
+	return dot(getSpatialPart(v1), getSpatialPart(v2)) - conj(getTemporalPart(v1)) * getTemporalPart(v2)
 end
 
 
@@ -187,33 +200,35 @@ macro generateFourVector(quantity)
 			return $(quantity)(VectorLorentz(v))
 		end
 
-		$(esc(quantity))(vs::Vararg{T}) where {T <: Number} = begin
-			return $(quantity)(VectorLorentz([vs...]))
+		$(esc(quantity))(vs::Number...) = begin
+			return $(quantity)(VectorLorentz(vs...))
 		end
 
-		Base.getproperty(q::$(esc(quantity)), u::Symbol) = begin 
-			return u === :vector ? getfield(q, :vector) : getproperty(q.vector, u)
-		end
+		Base.getproperty(q::$(esc(quantity)), u::Symbol) = u === :vector ? getfield(q, :vector) : getproperty(q.vector, u)
 
 		$(esc(:getTemporalPart))(q::$(esc(quantity))) = getTemporalPart(q.vector)
 
-		# getTemporalPart(q::$(esc(quantity)), m::AbstractMetric) = getTemporalPart(q.vector, m)
-
 		$(esc(:getSpatialPart))(q::$(esc(quantity))) = getSpatialPart(q.vector)
-
-		# getSpatialPart(q::$(esc(quantity)), m::AbstractMetric) = getSpatialPart(q.vector, m)
 
 		$(esc(:dot))(q1::$(esc(quantity)), q2::$(esc(quantity))) = dot(q1.vector, q2.vector)
 
 		$(esc(:dot))(q1::$(esc(quantity)), q2::$(esc(quantity)), m::AbstractMetric{D, U}) where {D, U} = begin
 			return dot(q1.vector, q2.vector, m)
 		end
+
+		Base.:(+)(v1::$(esc(quantity)), v2::$(esc(quantity))) = $(esc(quantity))(v1.vector + v2.vector)
+		Base.:(-)(v1::$(esc(quantity)), v2::$(esc(quantity))) = $(esc(quantity))(v1.vector - v2.vector)
+		Base.:(+)(v::$(esc(quantity))) = $(esc(quantity))(+v.vector)
+		Base.:(-)(v::$(esc(quantity))) = $(esc(quantity))(-v.vector)
+		Base.:(*)(v::$(esc(quantity)), a::Number) = $(esc(quantity))(v.vector * a)
+		Base.:(*)(a::Number, v::$(esc(quantity))) = $(esc(quantity))(a * v.vector)
+		Base.:(/)(v::$(esc(quantity)), a::Number) = $(esc(quantity))(v.vector / a)
+
 	end
 end
 
 
-# ----------------------------------------------------------------------------------------------- #
-#
+## generate constructors
 @generateFourVector FourPosition
 @generateFourVector FourVelocity
 @generateFourVector FourMomentum
@@ -228,7 +243,7 @@ end
 Computes the time component of a `FourPosition` object by dividing its temporal part by the speed of light `c`.
 
 # Input
-- `v::FourPosition`: four-position object from which the time component is extracted
+- `v` [`FourPosition`]: four-position object from which the time component is extracted
 
 # Output
 - `AbstractFloat`: the time component of the four-position
@@ -249,7 +264,7 @@ end
 Retrieve the spatial part of a `FourPosition` object.
 
 # Input
-- `v::FourPosition`: four-position object from which the time component is extracted
+- `v` [`FourPosition`]: four-position object from which the time component is extracted
 
 # Output
 - `VectorSpatial`: the spatial part of the four-position
@@ -266,7 +281,7 @@ Compute the energy of a `FourMomentum` object `v`.
 The energy is calculated as the temporal part of the four-momentum multiplied by the speed of light `c`.
 
 # Input
-- `v::FourMomentum`: four-momentum object for which the energy is to be computed
+- `v` [`FourMomentum`]: four-momentum object for which the energy is to be computed
 
 # Output
 - `AbstractFloat`: the energy corresponding to the given four-momentum in units of Joules
@@ -288,7 +303,7 @@ end
 Extracts the spatial part of a `FourMomentum` object.
 
 # Input
-- `v::FourMomentum`: the four-momentum object from which the spatial part (momentum) is to be extracted
+- `v` [`FourMomentum`]: the four-momentum object from which the spatial part (momentum) is to be extracted
 
 # Output
 - The `VectorSpatial` representing the spatial momentum component of the input `FourMomentum`
@@ -305,7 +320,7 @@ Computes the charge density of a `FourCurrentDensity` object `v`.
 The charge density is calculated as the temporal part of the four-current divided by the speed of light `c`.
 
 # Input
-- `v::FourCurrentDensity`: four-current object for which the charge density is to be computed 
+- `v` [`FourCurrentDensity`]: four-current object for which the charge density is to be computed 
 
 # Output
 - `AbstractFloat`: the charge density corresponding to the given four-current in units of C/m³
@@ -326,7 +341,7 @@ end
 Extracts the spatial part of a `FourCurrentDensity` object.
 
 # Input
-- `v::FourCurrentDensity`: the four-current object from which the spatial part (current) is to be extracted
+- `v` [`FourCurrentDensity`]: the four-current object from which the spatial part (current) is to be extracted
 
 # Output
 - The `VectorSpatial` representing the spatial current component of the input `FourCurrentDensity`
