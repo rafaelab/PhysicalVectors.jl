@@ -26,18 +26,18 @@ jobs:
         - name: Add Cosmonstants to environment
           run: |
             git clone https://github.com/rafaelab/Cosmonstants.jl.git
-            julia --project -e '
+            julia --startup-file=no --project -e '
               using Pkg; Pkg.develop(path = "Cosmonstants.jl")
               Pkg.instantiate()'
 
         - name: Install dependencies
           run: |
-            julia --project=docs -e '
+            julia --startup-file=no --project=docs -e '
               using Pkg
               Pkg.develop(path = ".")
               Pkg.instantiate()'
 
-        - run: julia --project=docs docs/make.jl
+        - run: julia --startup-file=no --project=docs docs/make.jl
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}

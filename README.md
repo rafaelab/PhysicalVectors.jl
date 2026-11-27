@@ -75,6 +75,22 @@ X = FourPosition(u"kg", 0, 0, c)
 
 
 
+## Building the documentation
+
+From the repository root, run:
+
+```sh
+bash docs/build.sh
+```
+
+This prepares the docs environment using the local package checkout and builds the HTML documentation in `docs/build/`. Julia runs with `--startup-file=no` so personal startup dependencies, such as Revise, cannot prevent the build from starting. The package's local dependencies must be available at the paths specified in `Project.toml`.
+
+Once the environment is prepared, rebuild directly with:
+
+```sh
+julia --startup-file=no --project=docs docs/make.jl
+```
+
 ## Development notes
 
 I was tempted to implement specific physical quantities such as `PositionVector`, `VelocityVector`, etc.

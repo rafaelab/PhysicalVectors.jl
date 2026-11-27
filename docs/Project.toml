@@ -2,5 +2,8 @@
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 PhysicalVectors = "0da606dd-ac54-4f8f-aa9e-4b32a6316753"
 
+[sources]
+PhysicalVectors = {path = ".."}
+
 [compat]
 julia = "1.9"
